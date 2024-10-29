@@ -17,12 +17,12 @@ export const createProject = mutation({
       size: v.number(),
       timestamp: v.string(),
     })),
-    bedRooms: v.number(),          
-    bathRooms: v.number(),         
-    floor: v.number(),             
-    area: v.number(),              
-    startDate: v.string(),         
-    endDate: v.string(),           
+    bedRooms: v.number(),
+    bathRooms: v.number(),
+    floor: v.number(),
+    area: v.number(),
+    startDate: v.string(),
+    endDate: v.string(),
   },
   handler: async (ctx, args) => {
     const newProject = await ctx.db.insert("projects", {
@@ -34,15 +34,30 @@ export const createProject = mutation({
       description: args.description,
       tools: args.tools,
       uploads: args.uploads,
-      bedRooms: args.bedRooms,      
-      bathRooms: args.bathRooms,    
-      floor: args.floor,            
-      area: args.area,              
-      startDate: args.startDate,    
-      endDate: args.endDate,        
+      bedRooms: args.bedRooms,
+      bathRooms: args.bathRooms,
+      floor: args.floor,
+      area: args.area,
+      startDate: args.startDate,
+      endDate: args.endDate,
     });
 
     return newProject;
+  },
+});
+
+
+export const deleteProject = mutation({
+  args: {
+    id: v.id("projects"),
+  },
+  handler: async (ctx, args) => {
+    const project = await ctx.db.get(args.id);
+    if (!project) {
+      throw new ConvexError("Project not found");
+    }
+    await ctx.db.delete(args.id);
+    return { success: true, id: args.id };
   },
 });
 
