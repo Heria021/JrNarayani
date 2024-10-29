@@ -1,5 +1,5 @@
 "use client"
-import { BookUser, FolderClosed, HelpCircle, Home, LayoutGridIcon, MonitorSmartphoneIcon, Settings, SquareUserRound, UserCircle2Icon } from "lucide-react";
+import { BookUser, FolderClosed, HelpCircle, Home, LayoutGridIcon, MonitorSmartphoneIcon, Settings } from "lucide-react";
 import Header from "./_components/header/Header";
 import Link from "next/link";
 

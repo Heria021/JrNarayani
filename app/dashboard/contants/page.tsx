@@ -1,7 +1,6 @@
 'use client';
-
 import React, { useRef } from 'react';
-import { Details, DetailsRow } from './_components/data-table';
+import { DetailsRow } from './_components/data-table';
 import { Trash2Icon } from 'lucide-react';
 import { api } from '@/convex/_generated/api';
 import { useQuery } from 'convex/react';

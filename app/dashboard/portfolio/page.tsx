@@ -25,9 +25,8 @@ interface Project {
   }[];
 }
 
-type Props = {};
 
-const Page = (props: Props) => {
+const Page = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const data = useQuery(api.upload.getAllProjects);
 

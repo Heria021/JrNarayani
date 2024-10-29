@@ -138,3 +138,5 @@ export const DetailsRow = forwardRef(({ data }: { data: Details[] }, ref) => {
         </div>
     );
 });
+
+DetailsRow.displayName = 'DetailsRow';

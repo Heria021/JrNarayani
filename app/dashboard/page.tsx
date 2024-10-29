@@ -6,9 +6,7 @@ import { FolderPlus, MonitorSmartphone, PlusIcon, Sheet } from 'lucide-react';
 import Image from 'next/image';
 import React from 'react';
 
-type Props = {};
-
-const Page: React.FC<Props> = () => {
+const Page = () => {
   const recentWork = useQuery(api.recents.fetchRecentEntries);
   return (
     <div className="p-4 space-y-4">
@@ -71,7 +69,7 @@ const Page: React.FC<Props> = () => {
               <CardFooter className='px-2 bg-gray-50 rounded-b-md'>
                 <div className="flex justify-between items-start w-full">
                   <div className="space-y-1">
-                    <p className='text-xs font-semibold text-gray-600'>Kulkarni's Villa File</p>
+                    <p className='text-xs font-semibold text-gray-600'>Kulkarnis Villa File</p>
                     <p className='text-sm font-bold text-primary leading-none'>{Item.update}</p>
                   </div>
                   <div className="flex flex-col items-end">

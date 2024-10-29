@@ -1,7 +1,5 @@
 'use client';
-
 import React, { useState } from "react";
-import { useDropzone } from "react-dropzone";
 import { useMutation, useQuery } from "convex/react";
 import { Id } from "@/convex/_generated/dataModel";
 import { api } from "@/convex/_generated/api";

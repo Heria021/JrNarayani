@@ -3,9 +3,8 @@ import { Smile } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
-type Props = {}
 
-const page = (props: Props) => {
+const page = () => {
   return (
 
     <div className=' w-full h-screen flex justify-center items-center '>

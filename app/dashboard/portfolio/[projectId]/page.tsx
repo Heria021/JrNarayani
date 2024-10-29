@@ -16,7 +16,7 @@ type Props = {
 }
 
 const ProjectPage = ({ params }: Props) => {
-    // @ts-ignore
+    // @ts-expect-error
     const { projectId } = use(params) 
     
     const project = useQuery(api.upload.fetchProjectEntry, { projectId })

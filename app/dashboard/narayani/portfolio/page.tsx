@@ -24,11 +24,13 @@ type Project = {
     timestamp: string;
   }[];
 };
+
 const Portfolio = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const data = useQuery(api.portfolio.getAllPortfolioEntries);
   const createPortfolioEntry = useMutation(api.portfolio.createPortfolioEntry);
   const [projectName, setProjectName] = useState('');
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   const [response, setResponse] = useState<any>(null);
   const [debouncedProjectName, setDebouncedProjectName] = useState(projectName);
 

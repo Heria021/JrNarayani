@@ -35,7 +35,7 @@ const DropzoneCard = () => {
         }
     };
 
-    const { getRootProps, getInputProps } = useDropzone({ onDrop });
+    // const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
     return (
         <DropzoneComponent

@@ -149,7 +149,7 @@ export function ProjectForm() {
                             <FormItem className="flex flex-row justify-between items-center">
                                 <div className="flex-1">
                                     <FormLabel>Owner</FormLabel>
-                                    <FormDescription>Enter the owner's name.</FormDescription>
+                                    <FormDescription>Enter the owners name.</FormDescription>
                                 </div>
                                 <div className="flex-1 p-1 pr-20">
                                     <FormControl>
@@ -235,7 +235,7 @@ export function ProjectForm() {
                     <FormField
                         control={form.control}
                         name="tools"
-                        render={({ field }) => (
+                        render={({ }) => (
                             <FormItem className="flex justify-start">
                                 <div className="flex-1">
                                     <FormLabel>Tools</FormLabel>

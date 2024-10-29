@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from 'react';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { ProjectForm } from './_components/ProjectForm';
 import { FileCard } from './_components/Uploads';
 import { useUpload } from '@/context/UploadContext';
