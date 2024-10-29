@@ -79,8 +79,8 @@ export const UpdatesFiles = ({ projectId }: UpdatesFilesProps) => {
             }
         }
     };
-
-    const { getRootProps, getInputProps } = useDropzone({ onDrop });
+    // @typescript-eslint/no-unused-vars
+    // const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
     return (
         <Dialog>

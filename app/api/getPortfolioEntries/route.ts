@@ -4,7 +4,7 @@ import { api } from "@/convex/_generated/api";
 
 const convex = new ConvexClient(process.env.NEXT_PUBLIC_CONVEX_URL as string);
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
     const data = await convex.query(api.portfolio.getAllPortfolioEntries, {});
     const response = NextResponse.json(data);

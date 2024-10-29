@@ -4,9 +4,7 @@ import { LogOut } from 'lucide-react'
 import { signOut } from 'next-auth/react'
 import React from 'react'
 
-type Props = {}
-
-const Header = (props: Props) => {
+const Header = () => {
     const handleSignOut = async () => {
         await signOut({ redirect: true, callbackUrl: "/auth/signin" });
       };
