@@ -11,13 +11,13 @@ export default defineSchema({
     addressCity: v.string(),
     description: v.string(),
     tools: v.array(v.string()),
-    uploads: v.array(v.object({
+    uploads: v.optional(v.array(v.object({
       name: v.string(),
       url: v.string(),
       type: v.string(),
       size: v.number(),
       timestamp: v.string(),
-    })),
+    }))),
     bedRooms: v.number(),
     bathRooms: v.number(),
     floor: v.number(),
@@ -71,6 +71,7 @@ export default defineSchema({
 
 
   portfolio: defineTable({
+    projectId: v.id("projects"),
     projectName: v.string(),
     description: v.string(),
     uploads: v.array(v.object({
@@ -80,8 +81,7 @@ export default defineSchema({
       size: v.number(),
       timestamp: v.string(),
     })),
-    id: v.id("projects"),
-  }).index("by_projectId", ["id"]),
+  }).index("by_projectId", ["projectId"]),
 
   recents: defineTable({
     projectId: v.id("projects"),

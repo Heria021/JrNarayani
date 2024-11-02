@@ -1,11 +1,12 @@
 'use client';
 
 import { Card } from '@/components/ui/card';
-import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import Link from 'next/link';
+import { Id } from '@/convex/_generated/dataModel';
+import { Face } from '@/components/shared/Face';
 
 interface Project {
   _id: string;
@@ -16,13 +17,6 @@ interface Project {
   addressCity: string;
   description: string;
   tools: string[];
-  uploads: {
-    name: string;
-    url: string;
-    type: string;
-    size: number;
-    timestamp: string;
-  }[];
 }
 
 
@@ -47,14 +41,7 @@ const Page = () => {
           <Link key={item._id} href={`/dashboard/portfolio/${item._id}`}>
             <Card className="shadow-none hover:shadow-md cursor-pointer relative overflow-hidden group">
               <div className="w-full h-64 relative">
-                <Image
-                  src={item.uploads[0]?.url || '/default-image.jpg'}
-                  alt={item.projectName}
-                  width={1280}
-                  height={853}
-                  quality={100}
-                  className="object-cover w-full h-full rounded-sm"
-                />
+                <Face projectId={item._id as Id<'projects'>}/>
                 <div className="absolute bottom-0 left-0 w-full h-full bg-gradient-to-t from-black/70 to-transparent flex items-end p-4 transition-opacity duration-300 opacity-0 group-hover:opacity-100">
                   <div className="z-10 w-full text-white transition-transform duration-300 opacity-0 translate-y-5 group-hover:opacity-100 group-hover:translate-y-0">
                     <p className="font-bold">{item.projectName}</p>

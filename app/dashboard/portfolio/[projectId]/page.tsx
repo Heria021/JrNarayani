@@ -9,6 +9,7 @@ import ImageGallery from './_components/imageIteration'
 import Options from './_components/options'
 import ProjectDetails from './_components/details'
 import { CalendarIcon } from 'lucide-react'
+import Face from '@/components/shared/Face'
 
 type Props = {
     params: {
@@ -20,22 +21,14 @@ const ProjectPage = ({ params }: Props) => {
     const { projectId } = use(params)
     const project = useQuery(api.upload.fetchProjectEntry, { projectId })
     const bluePrints = useQuery(api.bluePrint.fetchProjectById, { projectId })
+    const gallery = useQuery(api.gallery.fetchProjectById, { projectId })
 
     if (!project) return <div>Loading...</div>;
 
     return (
         <div className="w-full h-screen p-2 overflow-y-scroll">
             <div className='grid grid-cols-2 gap-4 my-4'>
-                {project.uploads?.[0] && (
-                    <Image
-                        src={project.uploads[0].url}
-                        alt="Main"
-                        width={1280}
-                        height={853}
-                        quality={100}
-                        className="object-cover w-full h-full rounded-sm"
-                    />
-                )}
+                <Face projectId={project._id}/>
                 <div className="px-6 py-3">
                     <div className="flex relative">
                         <div className="flex-grow pr-4">
@@ -64,10 +57,9 @@ const ProjectPage = ({ params }: Props) => {
                     </div>
                 </div>
             </div>
-            <ImageGallery images={project.uploads} />
+            <ImageGallery images={gallery?.uploads} />
             <hr className='border border-border my-4' />
             <ImageGallery images={bluePrints?.uploads} />
-
         </div>
     )
 }

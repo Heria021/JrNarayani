@@ -66,7 +66,6 @@ export const getFileURL = async (fileId: string) => {
 };
 
 
-// Folder
 export const uploadFileToFolder = async (
   file: FileInput,
   folderId: string, 

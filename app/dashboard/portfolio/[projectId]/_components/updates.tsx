@@ -11,8 +11,8 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { DropzoneComponent } from "@/components/shared/DropzoneComponenet";
 import TabContent from "./tabContent";
+import { DropzoneComponent } from "@/components/shared/DropBoxes";
 
 type UpdatesFilesProps = {
     projectId: Id<"projects">;

@@ -10,13 +10,6 @@ export const createProject = mutation({
     addressCity: v.string(),
     description: v.string(),
     tools: v.array(v.string()),
-    uploads: v.array(v.object({
-      name: v.string(),
-      url: v.string(),
-      type: v.string(),
-      size: v.number(),
-      timestamp: v.string(),
-    })),
     bedRooms: v.number(),
     bathRooms: v.number(),
     floor: v.number(),
@@ -33,7 +26,6 @@ export const createProject = mutation({
       addressCity: args.addressCity,
       description: args.description,
       tools: args.tools,
-      uploads: args.uploads,
       bedRooms: args.bedRooms,
       bathRooms: args.bathRooms,
       floor: args.floor,
@@ -43,6 +35,27 @@ export const createProject = mutation({
     });
 
     return newProject;
+  },
+});
+
+
+export const getAllProjects = query(async (ctx) => {
+  const projects = await ctx.db.query("projects").collect();
+  return projects;
+});
+
+export const fetchProjectEntry = query({
+  args: {
+    projectId: v.id("projects"),
+  },
+  handler: async (ctx, args) => {
+    const project = await ctx.db.get(args.projectId);
+
+    if (!project) {
+      throw new Error(`Project with id ${args.projectId} not found`);
+    }
+
+    return project;
   },
 });
 
@@ -62,11 +75,7 @@ export const deleteProject = mutation({
 });
 
 
-export const getAllProjects = query(async (ctx) => {
-  const projects = await ctx.db.query("projects").collect();
-  return projects;
-});
-
+//*//
 export const getProjectByName = query({
   args: {
     projectName: v.string(),
@@ -91,7 +100,7 @@ export const getProjectByName = query({
 
     const portfolioEntry = await ctx.db
       .query("portfolio")
-      .withIndex("by_projectId", (q) => q.eq("id", topProject._id))
+      .withIndex("by_projectId", (q) => q.eq("projectId", topProject._id))
       .first();
 
     return portfolioEntry ? null : topProject;
@@ -99,17 +108,3 @@ export const getProjectByName = query({
 });
 
 
-export const fetchProjectEntry = query({
-  args: {
-    projectId: v.id("projects"),
-  },
-  handler: async (ctx, args) => {
-    const project = await ctx.db.get(args.projectId);
-
-    if (!project) {
-      throw new Error(`Project with id ${args.projectId} not found`);
-    }
-
-    return project;
-  },
-});

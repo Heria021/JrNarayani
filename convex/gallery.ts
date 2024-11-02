@@ -41,3 +41,18 @@ export const fetchProjectById = query({
     },
 });
 
+export const fetchFirstUploadByProjectId = query({
+    args: {
+        projectId: v.id("projects"),
+    },
+    handler: async (ctx, args) => {
+        const projectGallery = await ctx.db
+            .query("gallery")
+            .withIndex("by_projectId", (q) => q.eq("projectId", args.projectId))
+            .first();
+
+        const firstUpload = projectGallery?.uploads[0] || null;
+
+        return firstUpload;
+    },
+});

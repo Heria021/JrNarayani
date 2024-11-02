@@ -14,7 +14,7 @@ type TabContentProps = {
 
 const TabContent = ({ uploads, title }: TabContentProps) => {
     return (
-        <div>
+        <div className=' space-y-2'>
             {uploads?.map((item, index) => (
                 <Card key={index} className="p-3 rounded-md shadow-none hover:shadow transition-shadow duration-200">
                     <div className="w-full flex gap-4">
