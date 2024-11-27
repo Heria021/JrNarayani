@@ -1,6 +1,5 @@
 'use client'
 import React from 'react'
-import Image from 'next/image'
 import { useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { Id } from '@/convex/_generated/dataModel'
@@ -10,15 +9,10 @@ import Options from './_components/options'
 import ProjectDetails from './_components/details'
 import { CalendarIcon } from 'lucide-react'
 import Face from '@/components/shared/Face'
+import { useParams } from 'next/navigation'
 
-type Props = {
-    params: {
-        projectId: Id<"projects">
-    }
-}
-const ProjectPage = ({ params }: Props) => {
-    // @ts-expect-error
-    const { projectId } = use(params)
+const ProjectPage = () => {
+    const { projectId } = useParams<{projectId: Id<"projects">}>();
     const project = useQuery(api.upload.fetchProjectEntry, { projectId })
     const bluePrints = useQuery(api.bluePrint.fetchProjectById, { projectId })
     const gallery = useQuery(api.gallery.fetchProjectById, { projectId })
@@ -36,7 +30,7 @@ const ProjectPage = ({ params }: Props) => {
                             <p className="text-sm text-gray-700 mb-4 leading-4">{project.description}</p>
                         </div>
                         <div className="absolute top-0 right-0 mr-1 flex items-center justify-center cursor-pointer">
-                            <Options projectId={projectId} />
+                            <Options projectId={projectId} project={project}  />
                         </div>
                     </div>
                     <ProjectDetails project={{

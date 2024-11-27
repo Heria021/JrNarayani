@@ -38,6 +38,39 @@ export const createProject = mutation({
   },
 });
 
+export const updateProject = mutation({
+  args: {
+      id: v.id("projects"),
+      projectName: v.optional(v.string()),
+      owner: v.optional(v.string()),
+      contact: v.optional(v.string()),
+      addressStreet: v.optional(v.string()),
+      addressCity: v.optional(v.string()),
+      description: v.optional(v.string()),
+      tools: v.optional(v.array(v.string())),
+      bedRooms: v.optional(v.number()),
+      bathRooms: v.optional(v.number()),
+      floor: v.optional(v.number()),
+      area: v.optional(v.number()),
+      startDate: v.optional(v.string()),
+      endDate: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+      const existingProject = await ctx.db.get(args.id);
+      if (!existingProject) {
+          throw new ConvexError("Project not found");
+      }
+
+      const updatedFields = Object.fromEntries(
+          Object.entries(args).filter(([_, value]) => value !== undefined)
+      );
+
+      const updatedProject = await ctx.db.patch(args.id, updatedFields);
+
+      return updatedProject;
+  },
+});
+
 
 export const getAllProjects = query(async (ctx) => {
   const projects = await ctx.db.query("projects").collect();

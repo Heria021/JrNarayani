@@ -5,14 +5,17 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import DeleteProject from './deleteProject';
 import { Id } from '@/convex/_generated/dataModel';
 import { UpdatesFiles } from './updates';
+import EditProjectDialog from './edit';
 
 type OptionsProps = {
     projectId: Id<"projects">;
+    project : any
 };
 
-const Options = ({ projectId }: OptionsProps) => {
+const Options = ({ projectId, project }: OptionsProps) => {
     const dialogTriggerRef = useRef<HTMLButtonElement>(null);
     const deleteTriggerRef = useRef<HTMLButtonElement>(null);
+    const editTriggerRef = useRef<HTMLButtonElement>(null);
 
     const handleOpenDialog = () => {
         if (dialogTriggerRef.current) {
@@ -24,11 +27,17 @@ const Options = ({ projectId }: OptionsProps) => {
             deleteTriggerRef.current.click();
         }
     };
+    const handleOpenedit = () => {
+        if (editTriggerRef.current) {
+            editTriggerRef.current.click();
+        }
+    };
 
     return (
         <DropdownMenu>
             <UpdatesFiles projectId={projectId} dialogTriggerRef={dialogTriggerRef} />
             <DeleteProject projectId={projectId} deleteTriggerRef={deleteTriggerRef} />
+            <EditProjectDialog project={project} projectId={projectId} editTriggerRef={editTriggerRef} />
             <DropdownMenuTrigger asChild>
                 <EllipsisVertical />
             </DropdownMenuTrigger>
@@ -36,7 +45,7 @@ const Options = ({ projectId }: OptionsProps) => {
                 <DropdownMenuLabel>Menu</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                    <DropdownMenuItem className='cursor-pointer'>
+                    <DropdownMenuItem onClick={handleOpenedit} className='cursor-pointer'>
                         <FileEdit />
                         <span>Edit</span>
                         <DropdownMenuShortcut>⌘E+A</DropdownMenuShortcut>
