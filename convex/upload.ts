@@ -38,36 +38,41 @@ export const createProject = mutation({
   },
 });
 
+
 export const updateProject = mutation({
   args: {
-      id: v.id("projects"),
-      projectName: v.optional(v.string()),
-      owner: v.optional(v.string()),
-      contact: v.optional(v.string()),
-      addressStreet: v.optional(v.string()),
-      addressCity: v.optional(v.string()),
-      description: v.optional(v.string()),
-      tools: v.optional(v.array(v.string())),
-      bedRooms: v.optional(v.number()),
-      bathRooms: v.optional(v.number()),
-      floor: v.optional(v.number()),
-      area: v.optional(v.number()),
-      startDate: v.optional(v.string()),
-      endDate: v.optional(v.string()),
+    id: v.id("projects"),  // Include the id field in the schema validation
+    projectName: v.optional(v.string()),
+    owner: v.optional(v.string()),
+    contact: v.optional(v.string()),
+    addressStreet: v.optional(v.string()),
+    addressCity: v.optional(v.string()),
+    description: v.optional(v.string()),
+    tools: v.optional(v.array(v.string())),
+    bedRooms: v.optional(v.number()),
+    bathRooms: v.optional(v.number()),
+    floor: v.optional(v.number()),
+    area: v.optional(v.number()),
+    startDate: v.optional(v.string()),
+    endDate: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-      const existingProject = await ctx.db.get(args.id);
-      if (!existingProject) {
-          throw new ConvexError("Project not found");
-      }
+    const { id, ...updateFields } = args;  // Separate id from the fields to update
+    const existingProject = await ctx.db.get(id);  // Fetch the existing project using id
+    
+    if (!existingProject) {
+      throw new ConvexError("Project not found");
+    }
 
-      const updatedFields = Object.fromEntries(
-          Object.entries(args).filter(([_, value]) => value !== undefined)
-      );
+    // Filter out any fields that are undefined
+    const updatedFields = Object.fromEntries(
+      Object.entries(updateFields).filter(([_, value]) => value !== undefined)
+    );
 
-      const updatedProject = await ctx.db.patch(args.id, updatedFields);
+    // Perform the update
+    const updatedProject = await ctx.db.patch(id, updatedFields);
 
-      return updatedProject;
+    return updatedProject;
   },
 });
 
@@ -107,8 +112,6 @@ export const deleteProject = mutation({
   },
 });
 
-
-//*//
 export const getProjectByName = query({
   args: {
     projectName: v.string(),
@@ -139,5 +142,4 @@ export const getProjectByName = query({
     return portfolioEntry ? null : topProject;
   },
 });
-
 

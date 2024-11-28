@@ -3,7 +3,6 @@ import React from 'react'
 import { useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { Id } from '@/convex/_generated/dataModel'
-import { use } from 'react'
 import ImageGallery from './_components/imageIteration'
 import Options from './_components/options'
 import ProjectDetails from './_components/details'
@@ -16,7 +15,7 @@ const ProjectPage = () => {
     const project = useQuery(api.upload.fetchProjectEntry, { projectId })
     const bluePrints = useQuery(api.bluePrint.fetchProjectById, { projectId })
     const gallery = useQuery(api.gallery.fetchProjectById, { projectId })
-
+console.log(bluePrints);
     if (!project) return <div>Loading...</div>;
 
     return (
@@ -51,9 +50,9 @@ const ProjectPage = () => {
                     </div>
                 </div>
             </div>
-            <ImageGallery images={gallery?.uploads} />
+            <ImageGallery images={bluePrints?.uploads} usePdfImage={true} />
             <hr className='border border-border my-4' />
-            <ImageGallery images={bluePrints?.uploads} />
+            <ImageGallery images={gallery?.uploads} />
         </div>
     )
 }

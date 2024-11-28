@@ -7,25 +7,17 @@ import { useUploadContext } from "@/context/UploadContext";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 
-interface UploadResponse {
-    name: string;
-    url: string;
-    type: string;
-    size: number;
-    timestamp: string;
-}
-
 const Dropzone = () => {
     const [files, setFiles] = useState<File[]>([]);
     const [uploadProgress, setUploadProgress] = useState<{ [key: string]: number }>({});
     const [isUploading, setIsUploading] = useState(false);
-    const [uploads, setUploads] = useState<UploadResponse[]>([]); 
+    const [uploads, setUploads] = useState<any[]>([]); 
     const { projectId, setProjectId, setReset } = useUploadContext();
     const addGallery = useMutation(api.gallery.addGallery);
 
     useEffect(() => {
         const savedFiles = JSON.parse(localStorage.getItem('uploadFiles') || '[]');
-        if (savedFiles.length > 0) setFiles(savedFiles);
+        setFiles(savedFiles);
     }, []);
 
     useEffect(() => {
@@ -33,64 +25,55 @@ const Dropzone = () => {
     }, [files]);
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
-        setFiles((prevFiles) => [...prevFiles, ...acceptedFiles]);
+        setFiles(prevFiles => [...prevFiles, ...acceptedFiles]);
     }, []);
 
-    // Function to handle the uploading of files
-    const uploadWithFolder = useCallback(async () => {
+    const uploadFiles = useCallback(async () => {
         if (!projectId || isUploading || files.length === 0) return;
 
         setIsUploading(true);
-        const newUploads: UploadResponse[] = [];
-        
-        const filesToUpload = files.filter(file => !uploads.some(response => response.name === file.name));
-        
-        const uploadPromises = filesToUpload.map(async (file) => {
-            try {
+        const filesToUpload = files.filter(file => !uploads.some(upload => upload.name === file.name));
+
+        try {
+            const newUploads = await Promise.all(filesToUpload.map(async (file) => {
                 const response = await uploadFileToFolder(file, projectId, (progress) => {
-                    setUploadProgress((prev) => ({ ...prev, [file.name]: progress }));
+                    setUploadProgress(prev => ({ ...prev, [file.name]: progress }));
                 });
 
-                const uploadResponse: UploadResponse = {
+                return {
                     name: response.name,
                     url: response.url,
                     type: response.type,
                     size: response.size,
                     timestamp: response.timestamp.toString(),
                 };
-                newUploads.push(uploadResponse);
-            } catch (error) {
-                console.error(`Upload failed for ${file.name}:`, error);
+            }));
+
+            setUploads(prev => [...prev, ...newUploads]);
+            if (newUploads.length > 0) {
+                await addGallery({ projectId, uploads: newUploads });
             }
-        });
-
-        await Promise.all(uploadPromises);
-
-        setUploads((prev) => [...prev, ...newUploads]);
-        setIsUploading(false);
-
-        if (newUploads.length > 0) {
-            await addGallery({ projectId, uploads: newUploads });
+        } catch (error) {
+            console.error("Error uploading files", error);
+        } finally {
+            setIsUploading(false);
+            setFiles([]);
+            setReset(true);
         }
-        
-        setReset(true);
-        setFiles([]);
     }, [projectId, files, uploads, isUploading, addGallery, setReset]);
 
     useEffect(() => {
-        if (projectId && files.length > 0) {
-            uploadWithFolder();
-        }
+        if (projectId) uploadFiles();
         setProjectId(null);
-    }, [projectId, files, uploadWithFolder, setProjectId]);
+    }, [projectId, files, uploadFiles, setProjectId]);
 
     const handleDelete = (name: string) => {
-        setFiles((prevFiles) => prevFiles.filter((file) => file.name !== name));
-        setUploadProgress((prev) => {
-            const { [name]: _, ...remainingProgress } = prev;
-            return remainingProgress;
+        setFiles(prev => prev.filter(file => file.name !== name));
+        setUploadProgress(prev => {
+            const { [name]: _, ...rest } = prev;
+            return rest;
         });
-        setUploads((prevUploads) => prevUploads.filter(upload => upload.name !== name));
+        setUploads(prev => prev.filter(upload => upload.name !== name));
     };
 
     return (

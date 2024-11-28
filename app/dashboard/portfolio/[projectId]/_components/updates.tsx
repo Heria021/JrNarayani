@@ -79,34 +79,39 @@ export const UpdatesFiles = forwardRef<HTMLButtonElement, UpdatesFilesProps>(({ 
     };
 
     return (
-        <Dialog >
+        <Dialog>
             <DialogTrigger ref={dialogTriggerRef} />
-            <DialogTitle className=" hidden" />
+            <DialogTitle className="hidden" />
 
-            <DialogContent className="max-w-2xl h-[90vh]">
-                <Tabs defaultValue="gallery" onValueChange={(value) => setSelectedTab(value)} >
+            <DialogContent className="max-w-2xl h-[90vh] flex flex-col">
+                <Tabs
+                    defaultValue="gallery"
+                    onValueChange={(value) => setSelectedTab(value)}
+                    className="flex flex-col h-full"
+                >
                     <TabsList className="grid w-full grid-cols-2">
                         <TabsTrigger value="gallery">Gallery</TabsTrigger>
-                        <TabsTrigger value="prints">BluePrints</TabsTrigger>
+                        <TabsTrigger value="prints">Blueprints</TabsTrigger>
                     </TabsList>
 
-                    <div className=" my-4 ">
+                    <div className="my-4">
                         <DropzoneComponent
                             onDrop={onDrop}
                             isUploading={isUploading}
                             uploadProgress={uploadProgress}
+                            acceptOnlyDocuments={selectedTab === "gallery" ? false : true}
                         />
                     </div>
 
-                    <TabsContent value="prints" className="space-y-2 overflow-scroll">
+                    <TabsContent value="prints" className="h-full overflow-auto">
                         <TabContent uploads={bluePrints?.uploads} title="Blueprints" />
                     </TabsContent>
 
-                    <TabsContent value="gallery">
+                    <TabsContent value="gallery" className="h-full overflow-auto">
                         <TabContent uploads={gallery?.uploads} title="Gallery" />
-                    </TabsContent>               
-                 </Tabs>
+                    </TabsContent>
+                </Tabs>
             </DialogContent>
-        </Dialog >
+        </Dialog>
     );
 });

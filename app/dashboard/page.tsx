@@ -55,7 +55,7 @@ const Page = () => {
       <div className="my-4">
         <h2 className="font-semibold text-2xl">Recent Updates</h2>
         <div className=" grid grid-cols-5 p-2 gap-4 ">
-          {recentWork?.map((Item, index) => (
+          {recentWork?.slice(0, 5).map((Item, index) => (
             <Card className=' cursor-pointer' key={index}>
               <CardContent className='p-1'>
                 <Image

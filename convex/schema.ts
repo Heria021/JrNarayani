@@ -11,13 +11,6 @@ export default defineSchema({
     addressCity: v.string(),
     description: v.string(),
     tools: v.array(v.string()),
-    uploads: v.optional(v.array(v.object({
-      name: v.string(),
-      url: v.string(),
-      type: v.string(),
-      size: v.number(),
-      timestamp: v.string(),
-    }))),
     bedRooms: v.number(),
     bathRooms: v.number(),
     floor: v.number(),
