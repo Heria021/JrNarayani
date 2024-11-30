@@ -41,7 +41,7 @@ export const createProject = mutation({
 
 export const updateProject = mutation({
   args: {
-    id: v.id("projects"),  // Include the id field in the schema validation
+    id: v.id("projects"), 
     projectName: v.optional(v.string()),
     owner: v.optional(v.string()),
     contact: v.optional(v.string()),
@@ -57,21 +57,18 @@ export const updateProject = mutation({
     endDate: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const { id, ...updateFields } = args;  // Separate id from the fields to update
-    const existingProject = await ctx.db.get(id);  // Fetch the existing project using id
+    const { id, ...updateFields } = args; 
+    const existingProject = await ctx.db.get(id); 
     
     if (!existingProject) {
       throw new ConvexError("Project not found");
     }
 
-    // Filter out any fields that are undefined
     const updatedFields = Object.fromEntries(
       Object.entries(updateFields).filter(([_, value]) => value !== undefined)
     );
 
-    // Perform the update
     const updatedProject = await ctx.db.patch(id, updatedFields);
-
     return updatedProject;
   },
 });

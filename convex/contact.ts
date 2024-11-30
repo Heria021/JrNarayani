@@ -37,6 +37,11 @@ export const getAllContacts = query(async (ctx) => {
     return contacts;
 });
 
+export const getTopContacts = query(async (ctx) => {
+    const contacts = await ctx.db.query("contacts").take(7);
+    return contacts;
+});
+
 export const deleteContact = mutation({
     args: {
         id: v.id("contacts"),

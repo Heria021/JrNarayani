@@ -55,7 +55,11 @@ export function ProjectForm() {
 
         try {
             const createProject = await addProject(finalData);
-            await addRecent({ projectId: createProject as Id<'projects'> });
+            await addRecent({
+                projectId: createProject as Id<'projects'>,
+                update: "New Project Created",
+                uploads: []
+            });
             setProjectId(createProject)
 
         } catch (error) {

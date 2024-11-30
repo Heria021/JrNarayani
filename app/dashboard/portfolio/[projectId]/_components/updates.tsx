@@ -27,7 +27,7 @@ export const UpdatesFiles = forwardRef<HTMLButtonElement, UpdatesFilesProps>(({ 
 
     const addBluePrint = useMutation(api.bluePrint.addBlueprint);
     const addGallery = useMutation(api.gallery.addGallery);
-    const addRecent = useMutation(api.recents.updateProjectEntry)
+    const addRecent = useMutation(api.recents.createProjectEntry)
 
     const bluePrints = useQuery(api.bluePrint.fetchProjectById, { projectId });
     const gallery = useQuery(api.gallery.fetchProjectById, { projectId });
@@ -65,9 +65,8 @@ export const UpdatesFiles = forwardRef<HTMLButtonElement, UpdatesFilesProps>(({ 
                 await addRecent({
                     projectId: finalData.projectId,
                     uploads: finalData.uploads,
-                    update: 'Files added',
+                    update: 'Files Added Project',
                 });
-                console.log("Project successfully added:", finalData);
 
             } catch (error) {
                 console.error("Error adding project:", error);
@@ -80,38 +79,38 @@ export const UpdatesFiles = forwardRef<HTMLButtonElement, UpdatesFilesProps>(({ 
 
     return (
         <Dialog>
-            <DialogTrigger ref={dialogTriggerRef} />
-            <DialogTitle className="hidden" />
+    <DialogTrigger ref={dialogTriggerRef} />
+    <DialogTitle className="hidden" />
 
-            <DialogContent className="max-w-2xl h-[90vh] flex flex-col">
-                <Tabs
-                    defaultValue="gallery"
-                    onValueChange={(value) => setSelectedTab(value)}
-                    className="flex flex-col h-full"
-                >
-                    <TabsList className="grid w-full grid-cols-2">
-                        <TabsTrigger value="gallery">Gallery</TabsTrigger>
-                        <TabsTrigger value="prints">Blueprints</TabsTrigger>
-                    </TabsList>
+    <DialogContent className="max-w-2xl h-[90vh] flex flex-col">
+        <Tabs 
+            defaultValue="gallery" 
+            onValueChange={(value) => setSelectedTab(value)} 
+            className="flex flex-col h-full"
+        >
+            <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="gallery">Gallery</TabsTrigger>
+                <TabsTrigger value="prints">Blueprints</TabsTrigger>
+            </TabsList>
 
-                    <div className="my-4">
-                        <DropzoneComponent
-                            onDrop={onDrop}
-                            isUploading={isUploading}
-                            uploadProgress={uploadProgress}
-                            acceptOnlyDocuments={selectedTab === "gallery" ? false : true}
-                        />
-                    </div>
+            <div className="my-4">
+                <DropzoneComponent
+                    onDrop={onDrop}
+                    isUploading={isUploading}
+                    uploadProgress={uploadProgress}
+                    acceptOnlyDocuments={selectedTab === "gallery" ? false : true}
+                />
+            </div>
 
-                    <TabsContent value="prints" className="h-full overflow-auto">
-                        <TabContent uploads={bluePrints?.uploads} title="Blueprints" />
-                    </TabsContent>
+            <TabsContent value="prints" className="h-full overflow-auto">
+                <TabContent uploads={bluePrints?.uploads} title="Blueprints" />
+            </TabsContent>
 
-                    <TabsContent value="gallery" className="h-full overflow-auto">
-                        <TabContent uploads={gallery?.uploads} title="Gallery" />
-                    </TabsContent>
-                </Tabs>
-            </DialogContent>
-        </Dialog>
+            <TabsContent value="gallery" className="h-full overflow-auto">
+                <TabContent uploads={gallery?.uploads} title="Gallery" />
+            </TabsContent>
+        </Tabs>
+    </DialogContent>
+</Dialog>
     );
 });

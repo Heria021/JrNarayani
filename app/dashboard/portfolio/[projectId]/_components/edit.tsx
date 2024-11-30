@@ -39,6 +39,7 @@ type UpdatesFilesProps = {
 
 const EditProjectDialog = forwardRef<HTMLButtonElement, UpdatesFilesProps>(({ project, projectId, editTriggerRef }, ref) => {
   const updateProject = useMutation(api.upload.updateProject);
+  const addRecent = useMutation(api.recents.createProjectEntry);
   const form = useForm<FormData>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -48,8 +49,8 @@ const EditProjectDialog = forwardRef<HTMLButtonElement, UpdatesFilesProps>(({ pr
       addressStreet: project.addressStreet || "",
       addressCity: project.addressCity || "",
       description: project.description || "",
-      tools: project.tools || [],  // Ensure tools have a default empty array
-      bedRooms: project.bedRooms ?? 0,  // Default to 0 if not provided
+      tools: project.tools || [],
+      bedRooms: project.bedRooms ?? 0,
       bathRooms: project.bathRooms ?? 0,
       floor: project.floor ?? 0,
       area: project.area ?? 0,
@@ -60,23 +61,29 @@ const EditProjectDialog = forwardRef<HTMLButtonElement, UpdatesFilesProps>(({ pr
 
   const onSubmit = async (data: FormData) => {
     try {
-        await updateProject({
-            id: projectId,
-            projectName: data.projectName,
-            owner: data.owner,
-            contact: data.contact,
-            addressStreet: data.addressStreet,
-            addressCity: data.addressCity,
-            description: data.description,
-            tools: data.tools,
-            bedRooms: Number(data.bedRooms),
-            bathRooms: Number(data.bathRooms),
-            floor: Number(data.floor),
-            area: Number(data.area),
-            startDate: data.startDate,
-            endDate: data.endDate || '', 
-          });
+      await updateProject({
+        id: projectId,
+        projectName: data.projectName,
+        owner: data.owner,
+        contact: data.contact,
+        addressStreet: data.addressStreet,
+        addressCity: data.addressCity,
+        description: data.description,
+        tools: data.tools,
+        bedRooms: Number(data.bedRooms),
+        bathRooms: Number(data.bathRooms),
+        floor: Number(data.floor),
+        area: Number(data.area),
+        startDate: data.startDate,
+        endDate: data.endDate || '',
+      });
       
+      await addRecent({
+        projectId: projectId,
+        update: "Project Details Updated",
+        uploads: []
+      });
+
     } catch (error) {
       console.error("Failed to update project:", error);
     }

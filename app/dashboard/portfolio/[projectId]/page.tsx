@@ -15,7 +15,6 @@ const ProjectPage = () => {
     const project = useQuery(api.upload.fetchProjectEntry, { projectId })
     const bluePrints = useQuery(api.bluePrint.fetchProjectById, { projectId })
     const gallery = useQuery(api.gallery.fetchProjectById, { projectId })
-console.log(bluePrints);
     if (!project) return <div>Loading...</div>;
 
     return (
