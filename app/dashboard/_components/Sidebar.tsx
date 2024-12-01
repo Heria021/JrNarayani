@@ -11,14 +11,14 @@ const Sidebar = (props: Props) => {
     const toggleProjects = () => {
         setIsProjectsOpen(prev => !prev);
         if (isPortfolio) {
-            setIsPortfolio(false); 
+            setIsPortfolio(false);
         }
     };
 
     const togglePortfolio = () => {
         setIsPortfolio(prev => !prev);
         if (isProjectsOpen) {
-            setIsProjectsOpen(false); 
+            setIsProjectsOpen(false);
         }
     };
 
@@ -87,18 +87,16 @@ const Sidebar = (props: Props) => {
                         </div>
 
                         <div>
-                            <Link href={'/dashboard/build'}>
-                                <div className="flex items-center text-muted-foreground gap-2 hover:bg-muted p-2 rounded-sm cursor-pointer hover:text-primary" onClick={toggleProjects}>
-                                    <span className="flex h-5 w-5 shrink-0 overflow-hidden ">
-                                        <FolderClosed className="aspect-square h-full w-full" />
-                                    </span>
-                                    <p className="text-sm font-semibold">All projects</p>
-                                </div>
-                            </Link>
+                            <div className="flex items-center text-muted-foreground gap-2 hover:bg-muted p-2 rounded-sm cursor-pointer hover:text-primary" onClick={toggleProjects}>
+                                <span className="flex h-5 w-5 shrink-0 overflow-hidden ">
+                                    <FolderClosed className="aspect-square h-full w-full" />
+                                </span>
+                                <p className="text-sm font-semibold">All projects</p>
+                            </div>
 
                             {isProjectsOpen && (
                                 <div className="pl-4 mt-2 space-y-1">
-                                    <Link href={'/dashboard/portfolio'}>
+                                    <Link href={'/dashboard/build'}>
                                         <div className="flex items-center text-muted-foreground gap-2 hover:bg-muted p-2 rounded-sm cursor-pointer hover:text-primary">
                                             <span className="flex h-4 w-4 shrink-0 overflow-hidden ">
                                                 <FolderPlus className="aspect-square h-full w-full" />
@@ -106,12 +104,12 @@ const Sidebar = (props: Props) => {
                                             <p className="text-sm font-semibold">Create Project</p>
                                         </div>
                                     </Link>
-                                    <Link href={'/dashboard/portfolio'}>
+                                    <Link href={'/dashboard/Estimate'}>
                                         <div className="flex items-center text-muted-foreground gap-2 hover:bg-muted p-2 rounded-sm cursor-pointer hover:text-primary">
                                             <span className="flex h-4 w-4 shrink-0 overflow-hidden ">
                                                 <SheetIcon className="aspect-square h-full w-full" />
                                             </span>
-                                            <p className="text-sm font-semibold">Create Spreadsheet</p>
+                                            <p className="text-sm font-semibold">Create Estimate</p>
                                         </div>
                                     </Link>
                                     <Link href={'/dashboard/portfolio'}>

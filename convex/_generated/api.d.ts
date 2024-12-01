@@ -15,6 +15,7 @@ import type {
 } from "convex/server";
 import type * as bluePrint from "../bluePrint.js";
 import type * as contact from "../contact.js";
+import type * as estimate from "../estimate.js";
 import type * as gallery from "../gallery.js";
 import type * as portfolio from "../portfolio.js";
 import type * as recents from "../recents.js";
@@ -31,6 +32,7 @@ import type * as upload from "../upload.js";
 declare const fullApi: ApiFromModules<{
   bluePrint: typeof bluePrint;
   contact: typeof contact;
+  estimate: typeof estimate;
   gallery: typeof gallery;
   portfolio: typeof portfolio;
   recents: typeof recents;

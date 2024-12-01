@@ -2,6 +2,34 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
 export default defineSchema({
+  estimateNumbers: defineTable({
+    estimate: v.number(),
+  })
+    .index("by_number", ["estimate"]),
+
+  estimate: defineTable({
+    clientName: v.string(),
+    clientNumber: v.string(),
+    clientAddress: v.object({
+      home: v.string(),
+      street: v.string(),
+      city: v.string(),
+    }),
+    gstPercentage: v.number(),
+    estimateNumber: v.string(),
+    date: v.string(),
+    items: v.array(
+      v.object({
+        description: v.string(),
+        quantity: v.number(),
+        price: v.number(),
+        per: v.union(v.literal("Box"), v.literal("NOs")),
+      })
+    ),
+  })
+    .index("by_name", ["clientName"])
+    .index("by_estimateNumber", ["estimateNumber"])
+    .index("by_number", ["clientNumber"]),
 
   projects: defineTable({
     projectName: v.string(),
