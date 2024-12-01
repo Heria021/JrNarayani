@@ -49,6 +49,16 @@ export const insertEstimate = mutation({
 });
 
 
+export const fetchEstimateByName = query({
+  args: {
+      clientName: v.string(),
+  },
+  handler: async (ctx, args) => {
+      const estimate = await ctx.db.query('estimate').withIndex("by_name", (q) => q.eq("clientName", args.clientName)).collect();
+      return estimate;
+  },
+});
+
 // export const searchEstimates = query({
 //   args: { searchTerm: v.string() }, 
 //   handler: async (ctx, { searchTerm }) => {

@@ -17,9 +17,9 @@ export interface InvoiceData {
   }[];
 }
 
-  export interface InvoiceItem {
-    description: string;
-    quantity: number;
-    price: number;
-    per: "Box" | "NOs";
-  }
+export interface InvoiceItem {
+  description: string;
+  quantity: number;
+  price: number;
+  per: "Box" | "NOs";
+}
