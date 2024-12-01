@@ -20,6 +20,7 @@ export const incrementEstimateNumber = mutation(async (ctx) => {
   return newEstimateNumber;
 });
 
+
 export const insertEstimate = mutation({
   args: {
     clientName: v.string(),
@@ -48,47 +49,47 @@ export const insertEstimate = mutation({
 });
 
 
-export const searchEstimates = query({
-  args: { searchTerm: v.string() }, 
-  handler: async (ctx, { searchTerm }) => {
-    const prefix = searchTerm;
-    const nextChar = String.fromCharCode(prefix.charCodeAt(prefix.length - 1) + 1);
+// export const searchEstimates = query({
+//   args: { searchTerm: v.string() }, 
+//   handler: async (ctx, { searchTerm }) => {
+//     const prefix = searchTerm;
+//     const nextChar = String.fromCharCode(prefix.charCodeAt(prefix.length - 1) + 1);
 
-    const clientNameEstimates = await ctx.db
-      .query("estimate")
-      .withIndex("by_name", (q) =>
-        q.gte("clientName", prefix).lt("clientName", nextChar)
-      )
-      .collect();
+//     const clientNameEstimates = await ctx.db
+//       .query("estimate")
+//       .withIndex("by_name", (q) =>
+//         q.gte("clientName", prefix).lt("clientName", nextChar)
+//       )
+//       .collect();
 
-    const clientNumberEstimates = await ctx.db
-      .query("estimate")
-      .withIndex("by_number", (q) =>
-        q.gte("clientNumber", prefix).lt("clientNumber", nextChar)
-      )
-      .collect();
+//     const clientNumberEstimates = await ctx.db
+//       .query("estimate")
+//       .withIndex("by_number", (q) =>
+//         q.gte("clientNumber", prefix).lt("clientNumber", nextChar)
+//       )
+//       .collect();
 
-    const estimateNumberEstimates = await ctx.db
-      .query("estimate")
-      .withIndex("by_estimateNumber", (q) =>
-        q.gte("estimateNumber", prefix).lt("estimateNumber", nextChar)
-      )
-      .collect();
+//     const estimateNumberEstimates = await ctx.db
+//       .query("estimate")
+//       .withIndex("by_estimateNumber", (q) =>
+//         q.gte("estimateNumber", prefix).lt("estimateNumber", nextChar)
+//       )
+//       .collect();
 
-    const allEstimates = [
-      ...clientNameEstimates,
-      ...clientNumberEstimates,
-      ...estimateNumberEstimates,
-    ];
+//     const allEstimates = [
+//       ...clientNameEstimates,
+//       ...clientNumberEstimates,
+//       ...estimateNumberEstimates,
+//     ];
 
-    const uniqueEstimates = Array.from(
-      new Set(allEstimates.map((e) => e._id)) 
-    ).map((id) => allEstimates.find((e) => e._id === id));
+//     const uniqueEstimates = Array.from(
+//       new Set(allEstimates.map((e) => e._id)) 
+//     ).map((id) => allEstimates.find((e) => e._id === id));
 
-    if (uniqueEstimates.length === 0) {
-      return null; 
-    }
+//     if (uniqueEstimates.length === 0) {
+//       return null; 
+//     }
 
-    return uniqueEstimates; 
-  },
-});
+//     return uniqueEstimates; 
+//   },
+// });
