@@ -156,19 +156,19 @@ const InvoicePreview: React.FC<{ invoiceData: InvoiceData }> = ({ invoiceData })
         <div className="mb-1">
           <div className="px-6">
             <div className="border-b-2 border-t-2 border-[#ff6745] ">
-              <div className="text-center text-xs py-1">
-                Narayani Traders, PWD Road, Dariba, Bidasar
+              <div className="text-center flex justify-center text-xs py-1">
+                <p>Narayani Traders, PWD Road, Dariba, Bidasar</p>
               </div>
               <div className="border-t-2 border-[#ff6745] w-full"></div>
               <div className="grid grid-cols-3 text-center text-xs gap-x-4 py-1">
                 <div className="flex items-center justify-center gap-1">
-                  <PhoneCallIcon className=" h-4 w-4" /> +91 9782353866
+                  <PhoneCallIcon className=" h-4 w-4" /> <p>+91 9782353866</p>
                 </div>
                 <div className="flex items-center justify-center gap-1">
-                  <MailIcon className=" h-4 w-4" /> Rameshsuthar61@gmail.com
+                  <MailIcon className=" h-4 w-4" /> <p>Rameshsuthar61@gmail.com</p>
                 </div>
                 <div className="flex items-center justify-center gap-1">
-                  <GlobeIcon className=" h-4 w-4" /> www.jr-narayani.com
+                  <GlobeIcon className=" h-4 w-4" /> <p>https://narayani-zej2.onrender.com</p>
                 </div>
               </div>
             </div>
