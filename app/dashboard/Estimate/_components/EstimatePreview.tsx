@@ -59,10 +59,10 @@ const InvoicePreview: React.FC<{ invoiceData: InvoiceData }> = ({ invoiceData })
             <div className="text-sm">
               <h3 className="text-base font-semibold mb-2">Estimate To</h3>
               <ul className="space-y-0 text-xs">
-                <li><strong>Name:</strong> {invoiceData.clientName}</li>
-                <li><strong>Phone:</strong> {invoiceData.clientNumber}</li>
-                <li><strong>Address:</strong></li>
-                <ul className="pl-4 space-y-0">
+                <li className="font-bold">{invoiceData.clientName}</li>
+                <li>+91 {invoiceData.clientNumber}</li>
+                {/* <li></li> */}
+                <ul className="space-y-0">
                   <li>{invoiceData.clientAddress.home}</li>
                   <li>{invoiceData.clientAddress.street}</li>
                   <li>{invoiceData.clientAddress.city}</li>
