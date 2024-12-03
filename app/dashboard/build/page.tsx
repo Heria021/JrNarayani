@@ -13,7 +13,7 @@ function Page() {
           <ProjectForm />
         </div>
         <div className="w-full h-full">
-          <Card className="w-full h-full shadow-none flex flex-col">
+          <Card className="w-full h-full flex flex-col">
             <div className="mb-8 p-4">
               <Dropzone />
             </div>
