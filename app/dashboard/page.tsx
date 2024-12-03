@@ -48,7 +48,7 @@ const Page = () => {
                 <h3 className="font-bold">New Project</h3>
               </Card>
             </Link>
-            <Link href={''}>
+            <Link href={'/dashboard/narayani'}>
               <Card className="p-3 min-w-64 cursor-pointer hover:bg-secondary shadow-none">
                 <div className="flex justify-between mb-4">
                   <div className="p-1 rounded-sm bg-blue-600 text-secondary">
