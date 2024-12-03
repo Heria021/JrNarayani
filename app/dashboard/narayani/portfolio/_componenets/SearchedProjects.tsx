@@ -27,7 +27,9 @@ const SearchedProjects
                         </>
                     ) : (
                         <>
+                        <div className="h-48">
                             <Face projectId={response._id} />
+                        </div>
                             <div className="flex flex-col justify-between space-y-2 pb-4">
                                 <div className="">
                                     <h3 className="font-bold text-sm">{response.projectName}</h3>

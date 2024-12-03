@@ -20,7 +20,7 @@ export const Face = ({ projectId }: { projectId: Id<'projects'> }) => {
             width={1280}
             height={853}
             quality={100}
-            className="object-cover w-full h-full rounded-sm"
+            className="object-cover w-full h-full rounded-md"
         />
     );
 };

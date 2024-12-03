@@ -17,14 +17,14 @@ type ProjectCardProps = {
 
 const SharedProjects = ({ project, onDelete }: ProjectCardProps) => (
     <Card key={project._id} className="shadow-none hover:shadow-md cursor-pointer relative overflow-hidden">
-        <div className="w-full h-44 relative">
+        <div className="w-full h-48 relative">
             <Image
                 src={project.uploads[0]?.url || '/default-image.jpg'}
                 alt={project.projectName}
                 width={1280}
                 height={853}
                 quality={100}
-                className="object-cover w-full h-full rounded-sm"
+                className="object-cover w-full h-full"
             />
             <div className="absolute bottom-0 left-0 w-full h-full bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-between p-4">
                 <div className="flex justify-end">

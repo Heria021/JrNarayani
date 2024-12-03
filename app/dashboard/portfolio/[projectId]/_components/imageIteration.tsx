@@ -33,7 +33,7 @@ const ImageGallery = ({ images, usePdfImage }: ImageGalleryProps) => (
                         width={1280}
                         height={853}
                         quality={100}
-                        className="object-cover w-full h-full rounded-sm transition-transform duration-300 ease-out transform group-hover:scale-95 cursor-pointer"
+                        className="object-cover w-full h-full rounded-md transition-transform duration-300 ease-out transform group-hover:scale-95 cursor-pointer"
                     />
                 )}
             </div>

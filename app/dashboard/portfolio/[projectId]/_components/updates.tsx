@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TabContent from "./tabContent";
-import { DropzoneComponent } from "@/components/shared/DropBoxes";
+import { DropBoxes } from "@/components/shared/DropBoxes";
 
 type UpdatesFilesProps = {
     projectId: Id<"projects">;
@@ -94,7 +94,7 @@ export const UpdatesFiles = forwardRef<HTMLButtonElement, UpdatesFilesProps>(({ 
             </TabsList>
 
             <div className="my-4">
-                <DropzoneComponent
+                <DropBoxes
                     onDrop={onDrop}
                     isUploading={isUploading}
                     uploadProgress={uploadProgress}

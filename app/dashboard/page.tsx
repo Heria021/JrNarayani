@@ -31,40 +31,45 @@ const Page = () => {
 
   return (
     <div className="p-2 space-y-4">
-
       <div className="">
         <div className="">
-          <h2 className="font-semibold text-2xl">Project files</h2>
+          <h2 className="font-semibold text-2xl">Explore More</h2>
         </div>
         <div className="p-2">
           <div className=" flex items-center gap-4 ">
-            <Card className="p-3 min-w-64 cursor-pointer hover:bg-secondary shadow-none">
-              <div className="flex justify-between mb-4">
-                <div className="p-1 rounded-sm bg-amber-500 text-secondary">
-                  <FolderPlus />
+            <Link href={'/dashboard/build'}>
+              <Card className="p-3 min-w-64 cursor-pointer hover:bg-secondary shadow-none">
+                <div className="flex justify-between mb-4">
+                  <div className="p-1 rounded-sm bg-amber-500 text-secondary">
+                    <FolderPlus />
+                  </div>
+                  <PlusIcon />
                 </div>
-                <PlusIcon />
-              </div>
-              <h3 className="font-bold">New Project</h3>
-            </Card>
-            <Card className="p-3 min-w-64 cursor-pointer hover:bg-secondary shadow-none">
-              <div className="flex justify-between mb-4">
-                <div className="p-1 rounded-sm bg-green-600 text-secondary">
-                  <Sheet />
+                <h3 className="font-bold">New Project</h3>
+              </Card>
+            </Link>
+            <Link href={''}>
+              <Card className="p-3 min-w-64 cursor-pointer hover:bg-secondary shadow-none">
+                <div className="flex justify-between mb-4">
+                  <div className="p-1 rounded-sm bg-blue-600 text-secondary">
+                    <MonitorSmartphone />
+                  </div>
+                  <PlusIcon />
                 </div>
-                <PlusIcon />
-              </div>
-              <h3 className="font-bold">New Datasheet</h3>
-            </Card>
-            <Card className="p-3 min-w-64 cursor-pointer hover:bg-secondary shadow-none">
-              <div className="flex justify-between mb-4">
-                <div className="p-1 rounded-sm bg-blue-600 text-secondary">
-                  <MonitorSmartphone />
+                <h3 className="font-bold">Web Portfolio</h3>
+              </Card>
+            </Link>
+            <Link href={'/dashboard/Estimate'}>
+              <Card className="p-3 min-w-64 cursor-pointer hover:bg-secondary shadow-none">
+                <div className="flex justify-between mb-4">
+                  <div className="p-1 rounded-sm bg-[#ff6745] text-secondary">
+                    <Sheet />
+                  </div>
+                  <PlusIcon />
                 </div>
-                <PlusIcon />
-              </div>
-              <h3 className="font-bold">Add Portfolio</h3>
-            </Card>
+                <h3 className="font-bold">New Estimate</h3>
+              </Card>
+            </Link>
           </div>
         </div>
       </div>
@@ -74,7 +79,7 @@ const Page = () => {
       </div>
 
       <div className="my-4">
-        <h2 className="font-semibold text-2xl">Recent Updates</h2>
+        <h2 className="font-semibold text-2xl">Recent Modifications</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 p-2 gap-4">
           {recentWork?.slice(0, 5).map((Item, index) => (
             <Card className="cursor-pointer" key={index}>
@@ -139,8 +144,14 @@ const Page = () => {
       <div className="">
         <hr />
       </div>
-      <div className=" border-border border rounded-sm overflow-hidden">
-        <DetailsTable data={contacts || []}  />
+
+      <div className="">
+        <h2 className="font-semibold text-2xl">Incoming Contact Requests</h2>
+        <div className="p-2">
+          <div className="border-border border rounded-sm overflow-hidden ">
+            <DetailsTable data={contacts || []} />
+          </div>
+        </div>
       </div>
     </div>
   );

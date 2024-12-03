@@ -25,7 +25,8 @@ const Dropzone = () => {
     }, [files]);
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
-        setFiles(prevFiles => [...prevFiles, ...acceptedFiles]);
+        const imageFiles = acceptedFiles.filter(file => file.type.startsWith('image/')); // Filter image files only
+        setFiles(prevFiles => [...prevFiles, ...imageFiles]);
     }, []);
 
     const uploadFiles = useCallback(async () => {
