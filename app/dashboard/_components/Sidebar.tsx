@@ -96,7 +96,7 @@ const Sidebar = (props: Props) => {
 
                             {isProjectsOpen && (
                                 <div className="pl-4 mt-2 space-y-1">
-                                    <Link href={'/dashboard/build'}>
+                                    <Link href={'/dashboard/Build'}>
                                         <div className="flex items-center text-muted-foreground gap-2 hover:bg-muted p-2 rounded-sm cursor-pointer hover:text-primary">
                                             <span className="flex h-4 w-4 shrink-0 overflow-hidden ">
                                                 <FolderPlus className="aspect-square h-full w-full" />
@@ -104,7 +104,7 @@ const Sidebar = (props: Props) => {
                                             <p className="text-sm font-semibold">Create Project</p>
                                         </div>
                                     </Link>
-                                    <Link href={'/dashboard/Estimate'}>
+                                    <Link href={'/dashboard/Client'}>
                                         <div className="flex items-center text-muted-foreground gap-2 hover:bg-muted p-2 rounded-sm cursor-pointer hover:text-primary">
                                             <span className="flex h-4 w-4 shrink-0 overflow-hidden ">
                                                 <SheetIcon className="aspect-square h-full w-full" />
@@ -125,7 +125,7 @@ const Sidebar = (props: Props) => {
                         </div>
 
 
-                        <Link href={'/dashboard/contants'}>
+                        <Link href={'/dashboard/Contants'}>
                             <div className="flex items-center text-muted-foreground gap-2 hover:bg-muted p-2 rounded-sm cursor-pointer hover:text-primary">
                                 <span className="flex h-5 w-5 shrink-0 overflow-hidden ">
                                     <BookUser className="aspect-square h-full w-full" />
@@ -133,7 +133,7 @@ const Sidebar = (props: Props) => {
                                 <p className="text-sm font-semibold">Contact</p>
                             </div>
                         </Link>
-                        <Link href={'/dashboard/narayani'}>
+                        <Link href={'/dashboard/Narayani'}>
                             <div className="flex items-center text-muted-foreground gap-2 hover:bg-muted p-2 rounded-sm cursor-pointer hover:text-primary">
                                 <span className="flex h-5 w-5 shrink-0 overflow-hidden ">
                                     <MonitorSmartphoneIcon className="aspect-square h-full w-full" />

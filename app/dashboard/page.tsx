@@ -7,7 +7,7 @@ import { FolderPlus, MonitorSmartphone, PlusIcon, Sheet } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-import { DetailsTable } from './contants/_components/contact-table';
+import { DetailsTable } from './Contacts/_components/contact-table';
 
 const Page = () => {
   const recentWork = useQuery(api.recents.fetchRecentEntries);

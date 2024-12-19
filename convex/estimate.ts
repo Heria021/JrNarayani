@@ -1,11 +1,11 @@
 
-import { v } from "convex/values";
+import { ConvexError, v } from "convex/values";
 import { query } from "./_generated/server";
 import { mutation } from "./_generated/server";
 
 export const getCurrentEstimate = query(async (ctx) => {
-    const currentEstimate = await ctx.db.query("estimateNumbers").collect();
-    return currentEstimate;
+  const currentEstimate = await ctx.db.query("estimateNumbers").collect();
+  return currentEstimate;
 });
 
 export const incrementEstimateNumber = mutation(async (ctx) => {
@@ -21,15 +21,29 @@ export const incrementEstimateNumber = mutation(async (ctx) => {
 });
 
 
+export const estimateInfo = query({
+  args: {
+    id: v.id("estimate"),
+  },
+  handler: async (ctx, args) => {
+    const estimate = await ctx.db.get(args.id);
+    if (!estimate) {
+      throw new ConvexError("Estimate not found!");
+    }
+
+    const client = await ctx.db.get(estimate.clientId);
+
+    if (!client) {
+      throw new ConvexError("Estimate client not found!");
+    }
+
+    return { estimate, client };
+  },
+});
+
 export const insertEstimate = mutation({
   args: {
-    clientName: v.string(),
-    clientNumber: v.string(),
-    clientAddress: v.object({
-      home: v.string(),
-      street: v.string(),
-      city: v.string(),
-    }),
+    clientId: v.id('client'),
     gstPercentage: v.number(),
     estimateNumber: v.string(),
     date: v.string(),
@@ -41,65 +55,25 @@ export const insertEstimate = mutation({
         per: v.union(v.literal("Box"), v.literal("NOs")),
       })
     ),
+    price: v.object({
+      total: v.number(),
+      subtotal: v.number(),
+      tax: v.number()
+    })
   },
   handler: async ({ db }, args) => {
     const result = await db.insert("estimate", args);
+    if(!result){
+      throw new ConvexError("Cann't create estimate!")
+    }
+    await db.insert("transaction", {
+      client: args.clientId,
+      estimateId: result,
+      remark: "New estimate created",
+      type: "credit",
+    });
+
     return result;
   },
 });
 
-
-export const fetchEstimateByName = query({
-  args: {
-      clientName: v.string(),
-  },
-  handler: async (ctx, args) => {
-      const estimate = await ctx.db.query('estimate').withIndex("by_name", (q) => q.eq("clientName", args.clientName)).collect();
-      return estimate;
-  },
-});
-
-// export const searchEstimates = query({
-//   args: { searchTerm: v.string() }, 
-//   handler: async (ctx, { searchTerm }) => {
-//     const prefix = searchTerm;
-//     const nextChar = String.fromCharCode(prefix.charCodeAt(prefix.length - 1) + 1);
-
-//     const clientNameEstimates = await ctx.db
-//       .query("estimate")
-//       .withIndex("by_name", (q) =>
-//         q.gte("clientName", prefix).lt("clientName", nextChar)
-//       )
-//       .collect();
-
-//     const clientNumberEstimates = await ctx.db
-//       .query("estimate")
-//       .withIndex("by_number", (q) =>
-//         q.gte("clientNumber", prefix).lt("clientNumber", nextChar)
-//       )
-//       .collect();
-
-//     const estimateNumberEstimates = await ctx.db
-//       .query("estimate")
-//       .withIndex("by_estimateNumber", (q) =>
-//         q.gte("estimateNumber", prefix).lt("estimateNumber", nextChar)
-//       )
-//       .collect();
-
-//     const allEstimates = [
-//       ...clientNameEstimates,
-//       ...clientNumberEstimates,
-//       ...estimateNumberEstimates,
-//     ];
-
-//     const uniqueEstimates = Array.from(
-//       new Set(allEstimates.map((e) => e._id)) 
-//     ).map((id) => allEstimates.find((e) => e._id === id));
-
-//     if (uniqueEstimates.length === 0) {
-//       return null; 
-//     }
-
-//     return uniqueEstimates; 
-//   },
-// });

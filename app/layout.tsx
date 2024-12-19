@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { ConvexProvider, ConvexReactClient } from "convex/react";
 import { UploadProvider } from "@/context/UploadContext";
+import { Toaster } from "@/components/ui/sonner";
 // import { ThemeProvider } from "@/components/shared/theme-provider";
 
 const geistSans = localFont({
@@ -28,14 +29,8 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ConvexProvider client={convex}>
           <UploadProvider>
-            {/* <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            > */}
               {children}
-            {/* </ThemeProvider>/ */}
+              <Toaster richColors />
           </UploadProvider>
         </ConvexProvider>
       </body>

@@ -7,7 +7,7 @@ export default defineSchema({
   })
     .index("by_number", ["estimate"]),
 
-  estimate: defineTable({
+  client: defineTable({
     clientName: v.string(),
     clientNumber: v.string(),
     clientAddress: v.object({
@@ -15,6 +15,14 @@ export default defineSchema({
       street: v.string(),
       city: v.string(),
     }),
+    clientFinance: v.object({
+      credit: v.number(),
+      debit: v.number()
+    })
+  }),
+
+  estimate: defineTable({
+    clientId: v.id('client'),
     gstPercentage: v.number(),
     estimateNumber: v.string(),
     date: v.string(),
@@ -26,10 +34,21 @@ export default defineSchema({
         per: v.union(v.literal("Box"), v.literal("NOs")),
       })
     ),
+    price: v.object({
+      total: v.number(),
+      subtotal: v.number(),
+      tax: v.number()
+    })
   })
-    .index("by_name", ["clientName"])
-    .index("by_estimateNumber", ["estimateNumber"])
-    .index("by_number", ["clientNumber"]),
+    .index("by_estimateNumber", ["estimateNumber"]),
+
+  transaction: defineTable({
+    client: v.id('client'),
+    estimateId: v.optional(v.id('estimate')),
+    remark: v.optional(v.string()),
+    type: v.union(v.literal("debit"), v.literal("credit")),
+  })
+  .index("by_client", ['client']),
 
   projects: defineTable({
     projectName: v.string(),
