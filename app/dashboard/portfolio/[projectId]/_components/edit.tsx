@@ -4,13 +4,13 @@ import { forwardRef } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { api } from '@/convex/_generated/api';
 import { Id } from '@/convex/_generated/dataModel';
-import InputField from '@/app/dashboard/Build/_components/InputField';
+import InputField from '@/app/dashboard/_components/InputField';
 import { Dialog, DialogContent, DialogFooter, DialogTrigger } from '@/components/ui/dialog';
 import { useMutation } from 'convex/react';
 import { DialogTitle } from '@radix-ui/react-dialog';
 import { Button } from '@/components/ui/button';
-import DateField from '@/app/dashboard/Build/_components/DateField';
-import ToolsField from '@/app/dashboard/Build/_components/ToolsField';
+import DateField from '@/app/dashboard/_components/DateField';
+import ToolsField from '@/app/dashboard/_components/ToolsField';
 
 export const FormSchema = z.object({
   projectName: z.string().nonempty({ message: "Project Name is required" }),
