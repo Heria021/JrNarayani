@@ -38,6 +38,10 @@ export default defineSchema({
       total: v.number(),
       subtotal: v.number(),
       tax: v.number()
+    }),
+    estimateFinance: v.object({
+      credit: v.number(),
+      debit: v.number()
     })
   })
     .index("by_estimateNumber", ["estimateNumber"]),
@@ -46,7 +50,6 @@ export default defineSchema({
     client: v.id('client'),
     estimateId: v.optional(v.id('estimate')),
     remark: v.optional(v.string()),
-    type: v.union(v.literal("debit"), v.literal("credit")),
   })
   .index("by_client", ['client']),
 

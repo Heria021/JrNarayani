@@ -1,8 +1,8 @@
-"use client"
-import { api } from '@/convex/_generated/api';
-import { Id } from '@/convex/_generated/dataModel';
-import { useMutation, useQuery } from 'convex/react';
-import React, { useEffect, useState } from 'react';
+"use client";
+import { api } from "@/convex/_generated/api";
+import { Id } from "@/convex/_generated/dataModel";
+import { useMutation, useQuery } from "convex/react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -19,7 +19,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import DateField from './DateField';
+import DateField from "./DateField";
 
 const EstimateSchema = z.object({
     gstPercentage: z.number().min(0, "GST must be a positive number"),
@@ -31,10 +31,9 @@ const EstimateSchema = z.object({
                 description: z.string().nonempty("Description is required"),
                 quantity: z.number().min(1, "Quantity must be at least 1"),
                 price: z.number().min(0, "Price must be a positive number"),
-                per: z.enum(["Box", "NOs"]).refine(
-                    (val) => val !== undefined,
-                    { message: "Per must be 'Box' or 'NOs'" }
-                ),
+                per: z.enum(["Box", "NOs"]).refine((val) => val !== undefined, {
+                    message: "Per must be 'Box' or 'NOs'",
+                }),
             })
         )
         .min(1, "At least one item is required"),
@@ -44,7 +43,7 @@ export type EstimateData = z.infer<typeof EstimateSchema>;
 
 type EstimateFormProps = {
     clientId: Id<"client">;
-    onGenerateInvoice: (data: Id<'estimate'>) => void;
+    onGenerateInvoice: (data: Id<"estimate">) => void;
 };
 
 const EstimateForm: React.FC<EstimateFormProps> = ({ clientId, onGenerateInvoice }) => {
@@ -52,6 +51,7 @@ const EstimateForm: React.FC<EstimateFormProps> = ({ clientId, onGenerateInvoice
     const [itemCount, setItemCount] = useState(1);
     const [currentEstimate, setCurrentEstimate] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [transactionType, setTransactionType] = useState<"credit" | "debit">("credit");
 
     const estimate = useQuery(api.estimate.getCurrentEstimate);
     const addEstimate = useMutation(api.estimate.insertEstimate);
@@ -104,8 +104,14 @@ const EstimateForm: React.FC<EstimateFormProps> = ({ clientId, onGenerateInvoice
         const { subtotal, tax, total } = calculateTotals(data.items, data.gstPercentage);
 
         const price = { subtotal, tax, total };
+
+        const estimateFinance = {
+            credit: transactionType === "credit" ? total : 0,
+            debit: transactionType === "debit" ? total : 0,
+        };
+
         if (client?._id) {
-            const EstimateInfo = await addEstimate({ ...data, price, clientId: client._id });
+            const EstimateInfo = await addEstimate({ ...data, price, estimateFinance, clientId: client._id });
             console.log(EstimateInfo);
             onGenerateInvoice(EstimateInfo as any);
         }
@@ -117,7 +123,6 @@ const EstimateForm: React.FC<EstimateFormProps> = ({ clientId, onGenerateInvoice
 
     return (
         <Card className="shadow-md rounded-lg p-6">
-
             <Form {...form}>
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -129,7 +134,12 @@ const EstimateForm: React.FC<EstimateFormProps> = ({ clientId, onGenerateInvoice
                             <Input id="clientNumber" disabled value={client?.clientNumber || ""} />
 
                             <Label htmlFor="estimateNumber">Estimate Number</Label>
-                            <Input value={currentEstimate || ""} readOnly {...register("estimateNumber")} placeholder="Generated automatically" />
+                            <Input
+                                value={currentEstimate || ""}
+                                readOnly
+                                {...register("estimateNumber")}
+                                placeholder="Generated automatically"
+                            />
                         </div>
 
                         <div className="space-y-1">
@@ -147,11 +157,32 @@ const EstimateForm: React.FC<EstimateFormProps> = ({ clientId, onGenerateInvoice
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <Label htmlFor="gstPercentage">GST Percentage</Label>
-                            <Input id="gstPercentage" type="number" {...register("gstPercentage", { valueAsNumber: true })} placeholder="Enter GST percentage" />
+                            <Input
+                                id="gstPercentage"
+                                type="number"
+                                {...register("gstPercentage", { valueAsNumber: true })}
+                                placeholder="Enter GST percentage"
+                            />
                         </div>
-                        <div>
-                            <Label htmlFor="date">Invoice Date</Label>
-                            <DateField control={control} name="date" label="Invoice Date" description="Select the invoice date" />
+                        <div className=" flex gap-2 ">
+                            <div className="">
+                                <Label htmlFor="date">Invoice Date</Label>
+                                <DateField control={control} name="date" label="Invoice Date" description="Select the invoice date" />
+                            </div>
+                            <div className="w-full">
+                                <Label htmlFor="transactionStatus">Transaction Status</Label>
+                                <Select  onValueChange={(value) => setTransactionType(value as "credit" | "debit")}>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select Status" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                            <SelectItem value="credit">Credit</SelectItem>
+                                            <SelectItem value="debit">Debit</SelectItem>
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+                            </div>
                         </div>
                     </div>
 
@@ -162,7 +193,10 @@ const EstimateForm: React.FC<EstimateFormProps> = ({ clientId, onGenerateInvoice
                                 <Input {...register(`items.${index}.description`)} placeholder="Description" />
                                 <Input type="number" {...register(`items.${index}.quantity`, { valueAsNumber: true })} placeholder="Quantity" />
                                 <Input type="number" {...register(`items.${index}.price`, { valueAsNumber: true })} placeholder="Price" />
-                                <Select {...register(`items.${index}.per`)} onValueChange={(value) => setValue(`items.${index}.per`, value as "Box" | "NOs")}>
+                                <Select
+                                    {...register(`items.${index}.per`)}
+                                    onValueChange={(value) => setValue(`items.${index}.per`, value as "Box" | "NOs")}
+                                >
                                     <SelectTrigger>
                                         <SelectValue placeholder="Per" />
                                     </SelectTrigger>
@@ -181,17 +215,17 @@ const EstimateForm: React.FC<EstimateFormProps> = ({ clientId, onGenerateInvoice
                     </div>
 
                     <CardFooter className="space-y-2 flex w-full justify-end">
-                        <div className=" space-y-2 pr-4">
+                        <div className="space-y-2 pr-4">
                             <div className="text-sm grid grid-cols-2 text-right gap-2 items-end border-b-[1px] border-black">
-                                <div className='font-bold'>Subtotal</div>
+                                <div className="font-bold">Subtotal</div>
                                 <div className="font-medium">{`${subtotal.toFixed(2)}`}</div>
                             </div>
                             <div className="text-sm grid grid-cols-2 text-right gap-2 items-end border-b-[1px] border-black">
-                                <div className='font-bold'>Tax</div>
+                                <div className="font-bold">Tax</div>
                                 <div className="font-medium">{`${tax.toFixed(2)}`}</div>
                             </div>
                             <div className="text-sm grid grid-cols-2 text-right gap-2 items-end border-b-[1px] border-black">
-                                <div className='font-bold'>Total</div>
+                                <div className="font-bold">Total</div>
                                 <div className="font-medium">{`${total.toFixed(2)}`}</div>
                             </div>
                         </div>
@@ -202,7 +236,6 @@ const EstimateForm: React.FC<EstimateFormProps> = ({ clientId, onGenerateInvoice
                     </Button>
                 </form>
             </Form>
-
         </Card>
     );
 };

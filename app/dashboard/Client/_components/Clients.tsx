@@ -34,7 +34,7 @@ const Clients = () => {
     return (
         <Card className="shadow-md rounded-lg p-4 h-full w-full overflow-auto">
             <CardContent className="p-2 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
-                {clients?.map((client) => (
+                {clients?.slice().reverse().map((client) => (
                     <Card key={client.client._id} className="p-4 rounded-lg w-full bg-white shadow-md hover:shadow-lg transition-shadow duration-300">
                         <CardHeader className="p-1 flex flex-row justify-between items-center">
                             <div className="flex gap-2 items-center">
@@ -51,14 +51,11 @@ const Clients = () => {
                                     <p className="text-sm text-gray-600">{client.client.clientNumber}</p>
                                 </div>
                             </div>
-                            <Button size="icon" variant="outline">
-                                <MoreVertical />
-                            </Button>
                         </CardHeader>
                         <CardContent className="p-2">
                             <div className="mb-2">
                                 <p className="font-bold text-sm text-gray-700">Address</p>
-                                <p className="text-sm text-gray-500">{client.client.clientAddress.home}, {client.client.clientAddress.street}, {client.client.clientAddress.city}</p>
+                                <p className="text-sm text-gray-500 truncate pr-8">{client.client.clientAddress.home}, {client.client.clientAddress.street}, {client.client.clientAddress.city}</p>
                             </div>
                             <div className="grid grid-cols-3 gap-4 mb-4">
                                 <div className="flex flex-col items-start justify-center">
@@ -71,7 +68,7 @@ const Clients = () => {
                                 </div>
                                 <div className="flex flex-col items-start justify-center">
                                     <p className="font-semibold text-sm text-gray-700">Last Estimate</p>
-                                    <p className="text-sm text-gray-500 pl-1">{client.lastEstimate ? formateTime(client.lastEstimate): '-'}</p>
+                                    <p className="text-sm text-gray-500 pl-1">{client.lastEstimate ? formateTime(client.lastEstimate) : '-'}</p>
                                 </div>
                             </div>
                         </CardContent>

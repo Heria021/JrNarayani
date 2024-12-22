@@ -59,7 +59,7 @@ const Page = () => {
                 <h3 className="font-bold">Web Portfolio</h3>
               </Card>
             </Link>
-            <Link href={'/dashboard/Estimate'}>
+            <Link href={'/dashboard/Client'}>
               <Card className="p-3 min-w-64 cursor-pointer hover:bg-secondary shadow-none">
                 <div className="flex justify-between mb-4">
                   <div className="p-1 rounded-sm bg-[#ff6745] text-secondary">

@@ -30,16 +30,14 @@ export const estimateInfo = query({
     if (!estimate) {
       throw new ConvexError("Estimate not found!");
     }
-
     const client = await ctx.db.get(estimate.clientId);
-
     if (!client) {
       throw new ConvexError("Estimate client not found!");
     }
-
     return { estimate, client };
   },
 });
+
 
 export const insertEstimate = mutation({
   args: {
@@ -58,22 +56,59 @@ export const insertEstimate = mutation({
     price: v.object({
       total: v.number(),
       subtotal: v.number(),
-      tax: v.number()
-    })
+      tax: v.number(),
+    }),
+    estimateFinance: v.object({
+      credit: v.number(),
+      debit: v.number(),
+    }),
   },
   handler: async ({ db }, args) => {
-    const result = await db.insert("estimate", args);
-    if(!result){
-      throw new ConvexError("Cann't create estimate!")
+    const estimateFinance = {
+      credit: args.estimateFinance?.credit ?? 0,
+      debit: args.estimateFinance?.debit ?? 0,
+    };
+
+    const result = await db.insert("estimate", { ...args, estimateFinance });
+    if (!result) {
+      throw new ConvexError("Can't create estimate!");
     }
+
     await db.insert("transaction", {
       client: args.clientId,
       estimateId: result,
       remark: "New estimate created",
-      type: "credit",
     });
 
     return result;
   },
 });
 
+export const updateEstimateFinance = mutation({
+  args: {
+    id: v.id("estimate"),
+  },
+  handler: async (ctx, args) => {
+    const estimate = await ctx.db.get(args.id);
+    if (!estimate) {
+      throw new ConvexError("Estimate not found!");
+    }
+
+    const estimateFinance = estimate.estimateFinance;
+
+    if(!estimateFinance){
+      throw new ConvexError("Estimate Finance not found!")
+    }
+
+    const updatedEstimateFinance = {
+      credit: 0,
+      debit: estimateFinance.credit,
+    };
+
+    await ctx.db.patch(args.id, {
+      estimateFinance: updatedEstimateFinance
+    });
+
+    return { message: "Estimate finance updated successfully!" };
+  },
+});

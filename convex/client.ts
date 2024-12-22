@@ -1,10 +1,5 @@
-import { ConvexError, v } from 'convex/values';
+import { v } from 'convex/values';
 import { mutation, query } from './_generated/server';
-
-// export const get = query(async (ctx) => {
-//   const clients = await ctx.db.query('client').collect();
-//   return clients;
-// });
 
 export const get = query(async (ctx) => {
   const clients = await ctx.db.query('client').collect();
@@ -18,17 +13,24 @@ export const get = query(async (ctx) => {
     let totalCredit = 0;
     let estimates = new Set();
     let lastEstimateDate = null;
+    let debitValue = 0;
+    let creditValue = 0;
     for (const transaction of transactions) {
-      if (transaction.type === "credit") {
-        if (transaction.estimateId) {
-          const estimate = await ctx.db.get(transaction.estimateId);
-          totalCredit += estimate?.price.total || 0;
+      if (transaction.estimateId) {
+        
+        const estimate = await ctx.db.get(transaction.estimateId);
+        if(estimate?.estimateFinance.credit){
+          creditValue += estimate.estimateFinance.credit;
+        }
+        if(estimate?.estimateFinance.debit){
+          debitValue += estimate.estimateFinance.debit;
+        }
+        totalCredit += estimate?.price.total || 0;
 
-          if (estimate?.date) {
-            const estimateDate = new Date(estimate.date);
-            if (!lastEstimateDate || estimateDate > lastEstimateDate) {
-              lastEstimateDate = estimateDate;
-            }
+        if (estimate?.date) {
+          const estimateDate = new Date(estimate.date);
+          if (!lastEstimateDate || estimateDate > lastEstimateDate) {
+            lastEstimateDate = estimateDate;
           }
         }
       }
@@ -42,6 +44,8 @@ export const get = query(async (ctx) => {
       amount: totalCredit,
       estimatesCount: estimates.size,
       lastEstimate: lastEstimateDateString,
+      creditValue: creditValue,
+      debitValue: debitValue,
     };
   }));
 
@@ -85,40 +89,3 @@ export const createClient = mutation({
     return newClient;
   }
 });
-
-
-
-// export const client = query({
-//   args: {
-//     id: v.id("client"),
-//   },
-//   handler: async (ctx, args) => {
-//     const client = await ctx.db.get(args.id);
-
-//     if (!client) {
-//       throw new ConvexError("Client not found");
-//     }
-//     const transactions = await ctx.db
-//       .query("transaction")
-//       .withIndex("by_client", (q) => q.eq("client", args.id))
-//       .collect();
-
-//     let totalCredit = 0;
-//     let estimatesCount = 0;
-
-//     transactions.forEach(transaction => {
-//       if (transaction.type === "credit") {
-//         totalCredit += transaction.remark ? parseFloat(transaction.remark) : 0;
-//       }
-//       if (transaction.estimateId) {
-//         estimatesCount += 1;
-//       }
-//     });
-
-//     return {
-//       client,
-//       amount: totalCredit,
-//       estimates: estimatesCount,
-//     };
-//   },
-// });

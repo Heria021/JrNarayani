@@ -22,14 +22,14 @@ const DateField = ({ control, name, label, description }: DateFieldProps) => {
             name={name}
             render={({ field }) => (
                 <FormItem className="items-center">
-                    <div className="flex-1 pr-20">
+                    <div className="flex-1">
                         <Popover>
                             <PopoverTrigger asChild>
                                 <FormControl>
                                     <Button
                                         variant={"outline"}
                                         className={cn(
-                                            "w-[240px] pl-3 text-left font-normal",
+                                            "w-[400px] pl-3 text-left font-normal",
                                             !field.value && "text-muted-foreground"
                                         )}
                                     >
