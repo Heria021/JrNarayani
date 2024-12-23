@@ -47,9 +47,12 @@ const Page = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {transactions.map((transaction, index) => (
-              <TransactionRow key={transaction._id} transaction={transaction} index={index} />
-            ))}
+            {transactions
+              .slice()
+              .reverse()
+              .map((transaction, index) => (
+                <TransactionRow key={transaction._id} transaction={transaction} index={index} />
+              ))}
           </TableBody>
         </Table>
       )}
@@ -131,9 +134,8 @@ const TransactionRow = ({ transaction, index }: { transaction: any; index: numbe
         </TableCell>
         <TableCell>
           <span
-            className={`inline-block px-3 py-1 rounded-lg font-semibold ${
-              isCreditZero ? "bg-green-200 text-green-800" : "bg-red-200 text-red-800"
-            }`}
+            className={`inline-block px-3 py-1 rounded-lg font-semibold ${isCreditZero ? "bg-green-200 text-green-800" : "bg-red-200 text-red-800"
+              }`}
           >
             {isCreditZero ? "SETTLED" : "PENDING"}
           </span>

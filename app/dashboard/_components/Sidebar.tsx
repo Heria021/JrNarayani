@@ -125,7 +125,7 @@ const Sidebar = (props: Props) => {
                         </div>
 
 
-                        <Link href={'/dashboard/Contants'}>
+                        <Link href={'/dashboard/Contats'}>
                             <div className="flex items-center text-muted-foreground gap-2 hover:bg-muted p-2 rounded-sm cursor-pointer hover:text-primary">
                                 <span className="flex h-5 w-5 shrink-0 overflow-hidden ">
                                     <BookUser className="aspect-square h-full w-full" />
