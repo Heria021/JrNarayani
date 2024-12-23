@@ -96,7 +96,7 @@ const Sidebar = (props: Props) => {
 
                             {isProjectsOpen && (
                                 <div className="pl-4 mt-2 space-y-1">
-                                    <Link href={'/dashboard/Build'}>
+                                    <Link href={'/dashboard/Project'}>
                                         <div className="flex items-center text-muted-foreground gap-2 hover:bg-muted p-2 rounded-sm cursor-pointer hover:text-primary">
                                             <span className="flex h-4 w-4 shrink-0 overflow-hidden ">
                                                 <FolderPlus className="aspect-square h-full w-full" />
