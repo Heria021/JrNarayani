@@ -16,6 +16,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 const Page = () => {
   const { clientId } = useParams<{ clientId: Id<"client"> }>();
@@ -98,7 +99,7 @@ const TransactionHeader = ({ clientId }: { clientId: Id<"client"> }) => {
           </Table>
         </div>
       ) : (
-        <p>Loading client details...</p>
+        <div className=""></div>
       )}
     </div>
   );
@@ -112,6 +113,7 @@ const TransactionRow = ({ transaction, index }: { transaction: any; index: numbe
   const settlePayment = async (estimateId: Id<'estimate'>) => {
     if (estimateId) {
       await updateFinanceMutation({ id: estimateId });
+      toast.success("Estimate Finance has been settled");
       console.log(`Payment settled for Estimate ID: ${estimateId}`);
     }
   };

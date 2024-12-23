@@ -20,6 +20,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import DateField from "./DateField";
+import { toast } from "sonner";
 
 const EstimateSchema = z.object({
     gstPercentage: z.number().min(0, "GST must be a positive number"),
@@ -113,6 +114,7 @@ const EstimateForm: React.FC<EstimateFormProps> = ({ clientId, onGenerateInvoice
         if (client?._id) {
             const EstimateInfo = await addEstimate({ ...data, price, estimateFinance, clientId: client._id });
             console.log(EstimateInfo);
+            toast.success("Estimate Has been created successfully");
             onGenerateInvoice(EstimateInfo as any);
         }
         incrementEstimate();

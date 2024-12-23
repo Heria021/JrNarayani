@@ -18,7 +18,7 @@ const SignInPage = () => {
         </CardContent>
         <div className="text-center my-4 flex flex-col items-center gap-1">
           <p className="text-sm text-gray-500 leading-none">only for admin purpose.</p>
-          <p className=" text-blue-600 hover:underline text-sm">owner: hariomsuthar7143@gmail.com</p>
+          <p className=" hover:underline text-sm">owner: hariomsuthar7143@gmail.com</p>
         </div>
       </Card>
     </div>

@@ -15,14 +15,17 @@ const authOptions: NextAuthOptions = {
           password: string;
         };
 
-        if (email !== "Ramy@032" || password !== "Narayani01") {
+        const validEmail = process.env.AUTH_EMAIL;
+        const validPassword = process.env.AUTH_PASSWORD;
+
+        if (email !== validEmail || password !== validPassword) {
           throw new Error("Invalid credentials");
         }
 
         return {
           id: "1234",
           name: "John Doe",
-          email: "john@gmail.com",
+          email: validEmail,
           role: "admin",
         };
       },
@@ -34,12 +37,12 @@ const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.role = user.role; 
+        token.role = user.role;
       }
       return token;
     },
   },
-  secret: 'somesorts',
+  secret: process.env.NEXTAUTH_SECRET,
 };
 
 const handler = NextAuth(authOptions);
