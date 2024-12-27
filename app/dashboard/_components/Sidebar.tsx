@@ -1,4 +1,4 @@
-import { BedSingleIcon, BookUser, FolderClosed, FolderPlus, HelpCircle, Home, HousePlus, LayoutGridIcon, MonitorSmartphoneIcon, ProjectorIcon, Settings, SheetIcon } from 'lucide-react'
+import { BedSingleIcon, BookUser, FolderClosed, FolderPlus, HelpCircle, Home, HousePlus, LayoutGridIcon, MonitorSmartphoneIcon, Settings, SheetIcon } from 'lucide-react'
 import Link from 'next/link'
 import React, { useState } from 'react'
 
@@ -91,7 +91,7 @@ const Sidebar = (props: Props) => {
                                 <span className="flex h-5 w-5 shrink-0 overflow-hidden ">
                                     <FolderClosed className="aspect-square h-full w-full" />
                                 </span>
-                                <p className="text-sm font-semibold">All projects</p>
+                                <p className="text-sm font-semibold">Create</p>
                             </div>
 
                             {isProjectsOpen && (
@@ -112,20 +112,10 @@ const Sidebar = (props: Props) => {
                                             <p className="text-sm font-semibold">Create Estimate</p>
                                         </div>
                                     </Link>
-                                    <Link href={'/dashboard/portfolio'}>
-                                        <div className="flex items-center text-muted-foreground gap-2 hover:bg-muted p-2 rounded-sm cursor-pointer hover:text-primary">
-                                            <span className="flex h-4 w-4 shrink-0 overflow-hidden ">
-                                                <ProjectorIcon className="aspect-square h-full w-full" />
-                                            </span>
-                                            <p className="text-sm font-semibold">Add Values</p>
-                                        </div>
-                                    </Link>
                                 </div>
                             )}
                         </div>
-
-
-                        <Link href={'/dashboard/Contats'}>
+                        <Link href={'/dashboard/Contacts'}>
                             <div className="flex items-center text-muted-foreground gap-2 hover:bg-muted p-2 rounded-sm cursor-pointer hover:text-primary">
                                 <span className="flex h-5 w-5 shrink-0 overflow-hidden ">
                                     <BookUser className="aspect-square h-full w-full" />
