@@ -31,7 +31,7 @@ const EstimatePage = () => {
             <p className="text-sm text-gray-700">Granite, Marble, Chemical and Building Materials</p>
           </div>
         </div>
-        <Link href={'/dashboard/EstimateHistory'}>
+        <Link href={'/dashboard/Client'}>
           <Button className="">
             <div className="flex items-center justify-between gap-1">
               <BookUserIcon className="w-8 h-8" strokeWidth={1.3} />

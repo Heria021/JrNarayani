@@ -2,8 +2,9 @@ import { Card } from '@/components/ui/card';
 import React from 'react';
 import Portfolio from './portfolio/page';
 
-const Page = () => {
+type Props = {}
 
+const page = (props: Props) => {
   return (
     <div className="flex justify-center items-center h-full w-full p-4">
       <div className="flex-1 h-full">
@@ -14,7 +15,7 @@ const Page = () => {
         </Card>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Page;
+export default page
