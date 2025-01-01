@@ -112,3 +112,42 @@ export const updateEstimateFinance = mutation({
     return { message: "Estimate finance updated successfully!" };
   },
 });
+
+export const updateEstimateAmount = mutation({
+  args: {
+    id: v.id("estimate"),
+    amount: v.number(),
+  },
+  handler: async (ctx, args) => {
+    const { id, amount } = args;
+
+    const estimate = await ctx.db.get(id);
+    if (!estimate) {
+      throw new ConvexError("Estimate not found!");
+    }
+
+    const estimateFinance = estimate.estimateFinance;
+
+    if (!estimateFinance) {
+      throw new ConvexError("Estimate Finance not found!");
+    }
+
+    if (amount > estimateFinance.credit) {
+      throw new ConvexError("Amount exceeds available credit!");
+    }
+
+    const updatedEstimateFinance = {
+      credit: estimateFinance.credit - amount,
+      debit: estimateFinance.debit + amount,
+    };
+
+    await ctx.db.patch(id, {
+      estimateFinance: updatedEstimateFinance,
+    });
+
+    return {
+      message: "Estimate finance updated successfully!",
+      updatedEstimateFinance,
+    };
+  },
+});

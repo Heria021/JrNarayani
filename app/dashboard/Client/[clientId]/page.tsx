@@ -1,4 +1,5 @@
 "use client";
+
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useMutation, useQuery } from "convex/react";
@@ -17,7 +18,19 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
+// Main Page Component
 const Page = () => {
   const { clientId } = useParams<{ clientId: Id<"client"> }>();
   const transactions = useQuery(api.transaction.transactions, { id: clientId });
@@ -42,6 +55,7 @@ const Page = () => {
               <TableHead>Payment</TableHead>
               <TableHead>Date</TableHead>
               <TableHead className="text-right">Amount</TableHead>
+              <TableHead className="text-right">Due</TableHead>
               <TableHead className="text-center">Actions</TableHead>
               <TableHead className="text-center">Settlement</TableHead>
             </TableRow>
@@ -59,6 +73,8 @@ const Page = () => {
     </div>
   );
 };
+
+// Transaction Header Component
 const TransactionHeader = ({ clientId }: { clientId: Id<"client"> }) => {
   const clients = useQuery(api.client.get);
   const client = clients?.find((c) => c.client._id === clientId);
@@ -102,25 +118,52 @@ const TransactionHeader = ({ clientId }: { clientId: Id<"client"> }) => {
           </Table>
         </div>
       ) : (
-        <div className=""></div>
+        <div></div>
       )}
     </div>
   );
 };
 
-
+// Transaction Row Component
 const TransactionRow = ({ transaction, index }: { transaction: any; index: number }) => {
+  console.log(transaction);
   const [showEstimate, setShowEstimate] = useState(false);
-  const updateFinanceMutation = useMutation(api.estimate.updateEstimateFinance);
+  const [settlementAmount, setSettlementAmount] = useState<string>("");
+  const updateFinanceMutation = useMutation(api.estimate.updateEstimateAmount);
 
-  const settlePayment = async (estimateId: Id<'estimate'>) => {
-    if (estimateId) {
-      await updateFinanceMutation({ id: estimateId });
-      toast.success("Estimate Finance has been settled");
-      console.log(`Payment settled for Estimate ID: ${estimateId}`);
+  const settlePayment = async (estimateId: Id<"estimate">, amount: number) => {
+    if (!estimateId) {
+      toast.error("Estimate ID is missing.");
+      return;
+    }
+
+    try {
+      await updateFinanceMutation({ id: estimateId, amount });
+      toast.success("Estimate finance has been settled.");
+    } catch (error) {
+      toast.error("Failed to settle payment. Please try again.");
+      console.error(error);
     }
   };
-  const isCreditZero = transaction.estimate?.estimateFinance.credit === 0;
+
+  const handleSettlePayment = () => {
+    const credit = transaction?.estimate?.estimateFinance?.credit || 0;
+    const amount = parseFloat(settlementAmount);
+
+    if (isNaN(amount) || amount <= 0) {
+      toast.error("Please enter a valid settlement amount.");
+      return;
+    }
+
+    if (amount > credit) {
+      toast.error("Settlement amount exceeds available credit.");
+      return;
+    }
+
+    settlePayment(transaction.estimate._id, amount);
+  };
+
+  const isCreditZero = transaction?.estimate?.estimateFinance?.credit === 0;
 
   return (
     <>
@@ -128,9 +171,11 @@ const TransactionRow = ({ transaction, index }: { transaction: any; index: numbe
         <TableCell className="font-medium">{index + 1}</TableCell>
         <TableCell>
           <div className="font-semibold text-gray-700">
-            {transaction.estimate ? transaction.estimate.estimateNumber : "Done By You"}
+            {transaction?.estimate?.estimateNumber || "Done By You"}
           </div>
-          <div className="text-sm text-gray-500">{transaction.remark}</div>
+          <div className="text-sm text-gray-500">
+            {transaction?.remark || "No remarks available."}
+          </div>
         </TableCell>
         <TableCell>
           <span
@@ -140,29 +185,66 @@ const TransactionRow = ({ transaction, index }: { transaction: any; index: numbe
             {isCreditZero ? "SETTLED" : "PENDING"}
           </span>
         </TableCell>
-        <TableCell>{new Date(transaction._creationTime).toLocaleDateString()}</TableCell>
+        <TableCell>
+          {transaction?._creationTime
+            ? new Date(transaction._creationTime).toLocaleDateString()
+            : "N/A"}
+        </TableCell>
         <TableCell className="text-right">
-          ₹{transaction.estimate ? transaction.estimate.price.total.toFixed(2) : "0.00"}
+          ₹{transaction?.estimate?.price?.total.toFixed(2) || "0.00"}
+        </TableCell>
+        <TableCell className="text-right">
+          ₹{transaction?.estimate?.estimateFinance?.credit.toFixed(2) || "0.00"}
         </TableCell>
         <TableCell className="text-center">
-          <Button
-            size={"icon"}
-            variant={"outline"}
-            onClick={() => settlePayment(transaction.estimate._id)}
-            disabled={isCreditZero}
-          >
-            <Wallet className="w-6 h-6" />
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild disabled={isCreditZero}>
+              <Button size="icon" variant="outline" disabled={isCreditZero}>
+                <Wallet className="w-6 h-6" />
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle>Settle Payment</DialogTitle>
+                <DialogDescription>
+                  Enter the amount to add for settlement. Ensure it does not exceed ₹
+                  {transaction?.estimate?.estimateFinance?.credit || 0}.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="flex items-center space-x-2">
+                <div className="grid flex-1 gap-2">
+                  <Label htmlFor="settlement" className="sr-only">
+                    Settlement Amount
+                  </Label>
+                  <Input
+                    id="settlement"
+                    placeholder={`₹${transaction?.estimate?.estimateFinance?.credit || 0}`}
+                    value={settlementAmount}
+                    onChange={(e) => setSettlementAmount(e.target.value)}
+                  />
+                </div>
+              </div>
+              <DialogFooter className="sm:justify-end">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={handleSettlePayment}
+                >
+                  Settle
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </TableCell>
 
         <TableCell className="text-center">
-          <Button size={"icon"} variant={"outline"} onClick={() => setShowEstimate(!showEstimate)}>
+          <Button size="icon" variant="outline" onClick={() => setShowEstimate(!showEstimate)}>
             <ArrowDownCircleIcon className="w-6 h-6" />
           </Button>
         </TableCell>
       </TableRow>
 
-      {showEstimate && transaction.estimate && (
+      {showEstimate && transaction?.estimate && (
         <TableRow>
           <TableCell colSpan={7} className="p-4 bg-gray-50">
             <div className="p-4 border rounded-lg flex flex-col space-y-4">
