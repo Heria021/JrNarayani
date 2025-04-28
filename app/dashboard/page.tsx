@@ -46,7 +46,7 @@ const Page = () => {
       <section className="space-y-4">
         <h2 className="text-2xl font-semibold tracking-tight">Explore More</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <Link href={'/dashboard/Build'} className="group">
+          <Link href={'/dashboard/project'} className="group">
             <Card className="p-4 transition-all duration-200 hover:shadow-md hover:scale-[1.02] border-border/50">
               <div className="flex justify-between items-center mb-4">
                 <div className="p-2 rounded-lg bg-amber-500/10 text-amber-500 group-hover:bg-amber-500/20 transition-colors">
@@ -70,7 +70,7 @@ const Page = () => {
               <p className="text-sm text-muted-foreground mt-1">Create your professional portfolio</p>
             </Card>
           </Link>
-          <Link href={'/dashboard/Client'} className="group">
+          <Link href={'/dashboard/client'} className="group">
             <Card className="p-4 transition-all duration-200 hover:shadow-md hover:scale-[1.02] border-border/50">
               <div className="flex justify-between items-center mb-4">
                 <div className="p-2 rounded-lg bg-[#ff6745]/10 text-[#ff6745] group-hover:bg-[#ff6745]/20 transition-colors">
