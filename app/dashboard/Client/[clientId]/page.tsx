@@ -5,7 +5,6 @@ import { Id } from "@/convex/_generated/dataModel";
 import { useMutation, useQuery } from "convex/react";
 import { useParams } from "next/navigation";
 import React, { useState } from "react";
-import PreviewEstimate from "../../estimate/[clientId]/_components/PreviewEstimate";
 import { ArrowDownCircleIcon, Wallet } from "lucide-react";
 import {
   Table,
@@ -29,6 +28,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import PreviewEstimate from "./_components/PreviewEstimate";
 
 // Main Page Component
 const Page = () => {
