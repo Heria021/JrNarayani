@@ -9,7 +9,6 @@ import { Id } from '@/convex/_generated/dataModel';
 import { Face } from '@/components/shared/Face';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Search, SortAsc, SortDesc } from 'lucide-react';
 
 interface Project {

@@ -88,7 +88,7 @@ const EditProjectDialog = forwardRef<HTMLButtonElement, UpdatesFilesProps>(({ pr
       
       await addRecent({
         projectId: projectId,
-        update: "Project Details Updated",
+        update: `Project details updated: ${Object.keys(data).join(', ')}`,
         uploads: []
       });
 

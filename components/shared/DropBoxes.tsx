@@ -1,6 +1,7 @@
 import { Progress } from "@/components/ui/progress";
 import Dropzone, { DropzoneProps } from "./UploadZone";
 import { FileClockIcon, LucideUploadCloud } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface DropzoneComponentProps {
   onDrop: DropzoneProps["onDrop"];
@@ -35,25 +36,41 @@ export function DropBoxes({
       uploadProgress={uploadProgress}
     >
       {() => (
-        <div className="flex flex-col text-center items-center justify-center gap-2">
-          <div className="text-primary p-2 flex items-center justify-center">
+        <div className="flex flex-col items-center justify-center gap-4 p-8">
+          <div className={cn(
+            "p-4 rounded-full transition-colors duration-200",
+            isUploading 
+              ? "bg-primary/10 text-primary" 
+              : "bg-muted/50 text-muted-foreground group-hover:text-primary group-hover:bg-primary/10"
+          )}>
             {isUploading ? (
-              <FileClockIcon size={36} />
+              <FileClockIcon className="w-8 h-8 animate-pulse" />
             ) : (
-              <LucideUploadCloud size={36} />
+              <LucideUploadCloud className="w-8 h-8" />
             )}
           </div>
+          
           {isUploading ? (
             uploadProgress && (
-              <div className="mt-2 w-[400px]">
-                <p>{uploadProgress.fileName}</p>
-                <Progress value={uploadProgress.progress} />
+              <div className="w-full max-w-md space-y-2">
+                <p className="text-sm text-foreground truncate text-center">
+                  {uploadProgress.fileName}
+                </p>
+                <Progress 
+                  value={uploadProgress.progress} 
+                  className="h-2"
+                />
               </div>
             )
           ) : (
-            <p>
-              Drag & Drop a {acceptOnlyDocuments ? ".pdf or .max file" : "image"} here
-            </p>
+            <div className="text-center space-y-1">
+              <p className="text-sm font-medium text-foreground">
+                Drag & Drop a {acceptOnlyDocuments ? "document" : "image"} here
+              </p>
+              <p className="text-xs text-muted-foreground">
+                or click to browse files
+              </p>
+            </div>
           )}
         </div>
       )}

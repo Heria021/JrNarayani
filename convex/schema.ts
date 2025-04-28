@@ -97,21 +97,6 @@ export default defineSchema({
   })
     .index("by_projectId", ["projectId"]),
 
-  contacts: defineTable({
-    id: v.string(),
-    email: v.string(),
-    name: v.string(),
-    city: v.string(),
-    contact: v.string(),
-    address: v.string(),
-    message: v.string(),
-    meetTime: v.string(),
-    timestamp: v.string(),
-    file: v.string(),
-  })
-    .index("by_name", ["name"])
-    .index("by_contact", ["contact"]),
-
 
   portfolio: defineTable({
     projectId: v.id("projects"),

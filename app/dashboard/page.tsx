@@ -3,12 +3,13 @@ import Face from '@/components/shared/Face';
 import { Card, CardFooter } from '@/components/ui/card';
 import { api } from '@/convex/_generated/api';
 import { useQuery } from 'convex/react';
-import { FolderPlus, MonitorSmartphone, PlusIcon, Sheet, Receipt } from 'lucide-react';
+import { FolderPlus, MonitorSmartphone, PlusIcon, Sheet, Receipt, FileText } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { Id } from "@/convex/_generated/dataModel";
 import { Skeleton } from '@/components/ui/skeleton';
+import { cn } from '@/lib/utils';
 
 interface Estimate {
   _id: Id<"estimate">;
@@ -22,7 +23,6 @@ interface Estimate {
 
 const Page = () => {
   const recentWork = useQuery(api.recents.fetchRecentEntries);
-  const contacts = useQuery(api.contact.getTopContacts);
   const recentEstimates = useQuery(api.estimate.getRecentEstimates);
 
   function calculateTimeDifference(timestamp: number) {
@@ -134,7 +134,13 @@ const Page = () => {
                       <div className="relative flex -space-x-2">
                         {Item.uploads && Item.uploads.length > 0 ? (
                           Item.uploads.slice(0, 3).map((upload, index) => (
-                            <div key={index} className="relative w-8 h-8 rounded-md overflow-hidden border-2 border-background">
+                            <div 
+                              key={index} 
+                              className={cn(
+                                "relative w-8 h-8 rounded-md overflow-hidden border-2 border-background transition-transform hover:scale-110",
+                                upload.type === "application/pdf" ? "bg-muted" : ""
+                              )}
+                            >
                               {upload.type !== "application/pdf" ? (
                                 <Image
                                   src={upload.url}
@@ -143,12 +149,9 @@ const Page = () => {
                                   className="object-cover"
                                 />
                               ) : (
-                                <Image
-                                  src={'/images/pdf-svgrepo-com.png'}
-                                  alt={`PDF ${index + 1}`}
-                                  fill
-                                  className="object-cover"
-                                />
+                                <div className="w-full h-full flex items-center justify-center">
+                                  <FileText className="w-4 h-4 text-muted-foreground" />
+                                </div>
                               )}
                             </div>
                           ))
@@ -156,7 +159,11 @@ const Page = () => {
                           <div className="w-8 h-8 rounded-md bg-muted" />
                         )}
                       </div>
-                      <p className="text-sm font-medium text-primary truncate">{Item.update}</p>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-primary truncate">
+                          {Item.update || "No recent updates"}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </CardFooter>
