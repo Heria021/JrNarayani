@@ -5,7 +5,7 @@ import { Id } from "@/convex/_generated/dataModel";
 import { useMutation, useQuery } from "convex/react";
 import { useParams } from "next/navigation";
 import React, { useState } from "react";
-import PreviewEstimate from "../../estimate/[clientId]/_components/PreviewEstimate";
+import PreviewEstimate from "@/app/dashboard/estimate/[clientId]/_components/PreviewEstimate";
 import { ArrowDownCircleIcon, Wallet } from "lucide-react";
 import {
   Table,
