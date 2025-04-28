@@ -4,7 +4,7 @@ import "./globals.css";
 import { ConvexProvider, ConvexReactClient } from "convex/react";
 import { UploadProvider } from "@/context/UploadContext";
 import { Toaster } from "@/components/ui/sonner";
-// import { ThemeProvider } from "@/components/shared/theme-provider";
+import { ThemeProvider } from "@/components/shared/theme-provider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -25,14 +25,21 @@ export default function RootLayout({
   const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <ConvexProvider client={convex}>
-          <UploadProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <ConvexProvider client={convex}>
+            <UploadProvider>
               {children}
               <Toaster richColors />
-          </UploadProvider>
-        </ConvexProvider>
+            </UploadProvider>
+          </ConvexProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

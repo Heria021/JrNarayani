@@ -30,7 +30,7 @@ const FileCardItem = React.memo(({ file, uploadProgress, onDelete }: { file: Fil
                 <div>
                     <div className="flex items-center justify-between gap-1">
                         <p className="font-bold text-xs truncate">{file.name}</p>
-                        <p className="text-xs">{(file.size / (1024 * 1024)).toFixed(2)} MB</p>
+                        <p className="text-xs w-1/2 text-right">{(file.size / (1024 * 1024)).toFixed(2)} MB</p>
                     </div>
                     <div className="w-full bg-gray-200 my-1 h-[2px] rounded">
                         <div
@@ -45,17 +45,27 @@ const FileCardItem = React.memo(({ file, uploadProgress, onDelete }: { file: Fil
     );
 });
 
-const FileCard = ({ files, uploadProgress, onDelete }: { files: File[], uploadProgress: { [key: string]: number }, onDelete: (name: string) => void }) => (
-    <div className="grid grid-cols-2 gap-4 text-white overflow-scroll">
-        {files.map((file) => (
-            <FileCardItem
-                key={file.name}
-                file={file}
-                uploadProgress={uploadProgress}
-                onDelete={onDelete}
-            />
-        ))}
-    </div>
-);
+const FileCard = ({ files, uploadProgress, onDelete }: { 
+    files: File[], 
+    uploadProgress: { [key: string]: number }, 
+    onDelete: (name: string) => void
+}) => {
+    return (
+        <div className="space-y-6">
+            <div className="rounded-lg p-4 shadow-sm">
+                <div className="grid grid-cols-2 gap-4 text-primary overflow-scroll">
+                    {files.map((file) => (
+                        <FileCardItem
+                            key={file.name}
+                            file={file}
+                            uploadProgress={uploadProgress}
+                            onDelete={onDelete}
+                        />
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+};
 
 export default FileCard;

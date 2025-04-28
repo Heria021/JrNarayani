@@ -1,5 +1,6 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { JWT } from "next-auth/jwt";
 
 const authOptions: NextAuthOptions = {
   session: {
@@ -8,23 +9,29 @@ const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       type: "credentials",
-      credentials: {},
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" }
+      },
       async authorize(credentials) {
-        const { email, password } = credentials as {
-          email: string;
-          password: string;
-        };
+        if (!credentials?.email || !credentials?.password) {
+          throw new Error("Email and password are required");
+        }
 
         const validEmail = process.env.AUTH_EMAIL;
         const validPassword = process.env.AUTH_PASSWORD;
 
-        if (email !== validEmail || password !== validPassword) {
+        if (!validEmail || !validPassword) {
+          throw new Error("Admin credentials not configured");
+        }
+
+        if (credentials.email !== validEmail || credentials.password !== validPassword) {
           throw new Error("Invalid credentials");
         }
 
         return {
-          id: "1234",
-          name: "John Doe",
+          id: "admin",
+          name: "Admin",
           email: validEmail,
           role: "admin",
         };
@@ -35,11 +42,17 @@ const authOptions: NextAuthOptions = {
     signIn: "/auth/signin",
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user }: { token: JWT; user: any }) {
       if (user) {
         token.role = user.role;
       }
       return token;
+    },
+    async session({ session, token }: { session: any; token: JWT }) {
+      if (session?.user) {
+        session.user.role = token.role;
+      }
+      return session;
     },
   },
   secret: process.env.NEXTAUTH_SECRET,

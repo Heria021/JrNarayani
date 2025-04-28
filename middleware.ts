@@ -3,13 +3,26 @@ import { getToken } from 'next-auth/jwt';
 import type { NextRequest } from 'next/server';
 
 export async function middleware(request: NextRequest) {
-    const token = await getToken({ req: request, secret: 'somesorts' });
-  console.log('Middleware token check: ',token)
+  const token = await getToken({ req: request });
   const publicPaths = ['/auth/signin'];
   const isAuthenticated = !!token;
-  if (!isAuthenticated && !publicPaths.includes(request.nextUrl.pathname)) {
+  const isAdmin = token?.role === 'admin';
+
+  // Allow access to public paths
+  if (publicPaths.includes(request.nextUrl.pathname)) {
+    return NextResponse.next();
+  }
+
+  // Redirect to signin if not authenticated
+  if (!isAuthenticated) {
     return NextResponse.redirect(new URL('/auth/signin', request.url));
   }
+
+  // Redirect to signin if not admin
+  if (!isAdmin) {
+    return NextResponse.redirect(new URL('/auth/signin', request.url));
+  }
+
   return NextResponse.next();
 }
 

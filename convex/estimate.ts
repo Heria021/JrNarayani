@@ -1,7 +1,45 @@
-
 import { ConvexError, v } from "convex/values";
-import { query } from "./_generated/server";
-import { mutation } from "./_generated/server";
+import { query, mutation } from "./_generated/server";
+import { Id } from "./_generated/dataModel";
+
+interface Estimate {
+  _id: Id<"estimate">;
+  _creationTime: number;
+  clientId: Id<"client">;
+  gstPercentage: number;
+  estimateNumber: string;
+  date: string;
+  items: {
+    description: string;
+    quantity: number;
+    price: number;
+    per: "Box" | "NOs";
+  }[];
+  price: {
+    total: number;
+    subtotal: number;
+    tax: number;
+  };
+  estimateFinance: {
+    credit: number;
+    debit: number;
+  };
+}
+
+interface Client {
+  _id: Id<"client">;
+  clientName: string;
+  clientNumber: string;
+  clientAddress: {
+    home: string;
+    street: string;
+    city: string;
+  };
+  clientFinance: {
+    credit: number;
+    debit: number;
+  };
+}
 
 export const getCurrentEstimate = query(async (ctx) => {
   const currentEstimate = await ctx.db.query("estimateNumbers").collect();
@@ -149,5 +187,27 @@ export const updateEstimateAmount = mutation({
       message: "Estimate finance updated successfully!",
       updatedEstimateFinance,
     };
+  },
+});
+
+export const getRecentEstimates = query({
+  handler: async (ctx) => {
+    const estimates = (await ctx.db
+      .query("estimate")
+      .order("desc")
+      .take(5)) as Estimate[];
+    
+    // Fetch client information for each estimate
+    const estimatesWithClients = await Promise.all(
+      estimates.map(async (estimate: Estimate) => {
+        const client = await ctx.db.get(estimate.clientId) as Client | null;
+        return {
+          ...estimate,
+          clientName: client?.clientName || "Unknown Client"
+        };
+      })
+    );
+    
+    return estimatesWithClients;
   },
 });

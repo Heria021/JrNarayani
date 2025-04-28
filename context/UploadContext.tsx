@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import { Id } from "@/convex/_generated/dataModel";
 
 interface UploadContextType {
@@ -12,10 +12,37 @@ const UploadContext = createContext<UploadContextType | undefined>(undefined);
 
 export function UploadProvider({ children }: { children: ReactNode }) {
     const [projectId, setProjectId] = useState<Id<"projects"> | null>(null);
-    const [reset, setReset] =  useState<boolean>(false);
+    const [reset, setReset] = useState<boolean>(false);
+
+    // Log when projectId changes
+    useEffect(() => {
+        console.log("UploadContext - projectId changed:", projectId);
+    }, [projectId]);
+
+    // Log when reset changes
+    useEffect(() => {
+        console.log("UploadContext - reset changed:", reset);
+    }, [reset]);
+
+    // Wrapper for setProjectId to add logging
+    const handleSetProjectId = (id: Id<"projects"> | null) => {
+        console.log("Setting projectId to:", id);
+        setProjectId(id);
+    };
+
+    // Wrapper for setReset to add logging
+    const handleSetReset = (bool: boolean) => {
+        console.log("Setting reset to:", bool);
+        setReset(bool);
+    };
 
     return (
-        <UploadContext.Provider value={{ projectId, setProjectId, reset, setReset }}>
+        <UploadContext.Provider value={{ 
+            projectId, 
+            setProjectId: handleSetProjectId, 
+            reset, 
+            setReset: handleSetReset 
+        }}>
             {children}
         </UploadContext.Provider>
     );
